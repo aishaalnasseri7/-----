@@ -1,0 +1,1636 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: 'Tajawal', sans-serif; background: #F3F7FF; }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-thumb { background: #B7C5E5; border-radius: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  input, select, textarea, button { font-family: 'Tajawal', sans-serif; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes slideIn { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+  @keyframes toastIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</helmet>
+
+<div dir="rtl" lang="ar" style="width:100%;min-height:100vh;background:#F3F7FF;">
+
+<sc-if value="{{ showLogin }}" hint-placeholder-val="{{ true }}">
+  <div style="min-height:100vh;width:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#03045D 0%,#3a1a6b 42%,#A12B7E 78%,#02A6BC 130%);padding:32px;position:relative;overflow:hidden;">
+    <div style="position:absolute;inset:0;background:radial-gradient(circle at 15% 15%, rgba(183,197,229,0.18), transparent 40%),radial-gradient(circle at 85% 85%, rgba(2,166,188,0.25), transparent 45%);"></div>
+    <div style="position:relative;width:100%;max-width:560px;background:rgba(255,255,255,0.98);border-radius:20px;box-shadow:0 30px 80px rgba(3,4,93,0.45);padding:44px 40px 36px;animation:fadeIn 0.5s ease;">
+      <div style="display:flex;align-items:center;justify-content:center;gap:18px;margin-bottom:8px;">
+        <img src="{{ logoErtiqaaSrc }}" alt="ارتقاء" style="height:34px;width:auto;">
+        <div style="width:1px;height:30px;background:#B7C5E5;"></div>
+        <img src="{{ logoTahawulColorSrc }}" alt="تحوّل" style="height:30px;width:auto;">
+      </div>
+      <p style="text-align:center;color:#03045D;opacity:0.55;font-size:12px;margin:0 0 22px;font-weight:500;">برعاية ارتقاء × تحوّل</p>
+      <h1 style="text-align:center;color:#03045D;font-size:24px;font-weight:800;margin:0 0 6px;">المنصة الوطنية الموحدة</h1>
+      <p style="text-align:center;color:#03045D;opacity:0.65;font-size:14.5px;margin:0 0 30px;font-weight:400;">لإدارة المعرفة الحكومية ومشاركة الدروس المستفادة بين الجهات</p>
+
+      <div style="font-size:13px;font-weight:700;color:#03045D;margin-bottom:10px;">اختر دورك للدخول التجريبي</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px;">
+        <sc-for list="{{ roleOptions }}" as="r" hint-placeholder-count="4">
+          <button onclick="{{ r.onSelect }}" style="{{ r.cardStyle }}">
+            <span style="font-size:14px;font-weight:700;display:block;">{{ r.label }}</span>
+            <span style="font-size:11.5px;opacity:0.7;display:block;margin-top:3px;font-weight:400;">{{ r.hint }}</span>
+          </button>
+        </sc-for>
+      </div>
+
+      <button onclick="{{ login }}" style="width:100%;padding:14px;border:none;border-radius:12px;background:linear-gradient(90deg,#03045D,#A12B7E);color:#fff;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 10px 24px rgba(161,43,126,0.35);">دخول إلى المنصة</button>
+      <p style="text-align:center;color:#03045D;opacity:0.4;font-size:11px;margin:16px 0 0;">نموذج تجريبي — جميع البيانات وهمية ولأغراض العرض فقط</p>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{ showApp }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;min-height:100vh;width:100%;">
+
+  <!-- Sidebar (right in RTL) -->
+  <div style="width:260px;flex:none;background:#03045D;min-height:100vh;display:flex;flex-direction:column;padding:22px 16px;position:sticky;top:0;height:100vh;">
+    <div style="display:flex;align-items:center;gap:10px;padding:0 6px 20px;border-bottom:1px solid rgba(183,197,229,0.2);margin-bottom:18px;">
+      <img src="{{ logoTahawulWhiteSrc }}" alt="تحوّل" style="height:26px;width:auto;">
+    </div>
+    <div style="font-size:11px;color:#B7C5E5;font-weight:700;padding:0 10px;margin-bottom:8px;letter-spacing:0.3px;">طبقة التطبيقات</div>
+    <sc-for list="{{ navMain }}" as="n" hint-placeholder-count="6">
+      <button onclick="{{ n.onClick }}" style="{{ n.style }}">
+        <span style="width:8px;height:8px;border-radius:50%;background:{{ n.dotColor }};flex:none;"></span>
+        <span>{{ n.label }}</span>
+      </button>
+    </sc-for>
+
+    <button onclick="{{ goLibrary }}" style="{{ libraryNavStyle }}">
+      <span style="width:8px;height:8px;border-radius:50%;background:#02A6BC;flex:none;"></span>
+      <span>مكتبة المعرفة الرقمية</span>
+    </button>
+
+    <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}">
+      <div style="font-size:11px;color:#B7C5E5;font-weight:700;padding:16px 10px 8px;letter-spacing:0.3px;">الذكاء والحوكمة</div>
+      <button onclick="{{ goAdmin }}" style="{{ adminNavStyle }}">
+        <span style="width:8px;height:8px;border-radius:50%;background:#A12B7E;flex:none;"></span>
+        <span>الإدارة والحوكمة</span>
+      </button>
+    </sc-if>
+
+    <div style="margin-top:auto;padding:14px 10px 0;border-top:1px solid rgba(183,197,229,0.2);">
+      <div style="font-size:10.5px;color:#B7C5E5;opacity:0.7;">إصدار تجريبي 1.0</div>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column;">
+    <!-- Topbar -->
+    <div style="height:68px;flex:none;background:#fff;border-bottom:1px solid rgba(3,4,93,0.08);display:flex;align-items:center;padding:0 26px;gap:18px;position:sticky;top:0;z-index:20;">
+      <div style="flex:1;max-width:420px;position:relative;">
+        <input value="{{ globalSearch }}" oninput="{{ onGlobalSearch }}" placeholder="بحث عام في المنصة…" style="width:100%;padding:10px 16px;border-radius:10px;border:1px solid rgba(3,4,93,0.14);background:#F3F7FF;color:#03045D;font-size:13.5px;outline:none;">
+      </div>
+      <div style="flex:1;"></div>
+      <div style="position:relative;width:38px;height:38px;border-radius:10px;background:#F3F7FF;display:flex;align-items:center;justify-content:center;cursor:pointer;" onclick="{{ toggleNotif }}">
+        <span style="font-size:16px;">🔔</span>
+        <span style="position:absolute;top:6px;left:8px;width:8px;height:8px;border-radius:50%;background:#A12B7E;border:2px solid #fff;"></span>
+      </div>
+      <sc-if value="{{ notifOpen }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;top:60px;left:120px;width:280px;background:#fff;border-radius:12px;box-shadow:0 14px 40px rgba(3,4,93,0.2);border:1px solid rgba(3,4,93,0.08);padding:14px;z-index:50;">
+          <div style="font-size:13px;font-weight:700;color:#03045D;margin-bottom:8px;">آخر الإشعارات</div>
+          <sc-for list="{{ notifItems }}" as="it" hint-placeholder-count="3">
+            <div style="font-size:12px;color:#03045D;opacity:0.75;padding:7px 0;border-top:1px solid rgba(3,4,93,0.06);">{{ it }}</div>
+          </sc-for>
+        </div>
+      </sc-if>
+      <div style="width:1px;height:30px;background:rgba(3,4,93,0.1);"></div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#02A6BC,#A12B7E);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;">{{ userInitial }}</div>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:#03045D;">{{ userName }}</div>
+          <div style="font-size:11px;color:#02A6BC;font-weight:600;">{{ userRoleLabel }}</div>
+        </div>
+      </div>
+      <button onclick="{{ logout }}" style="padding:9px 16px;border-radius:9px;border:1px solid rgba(161,43,126,0.3);background:#fff;color:#A12B7E;font-size:12.5px;font-weight:700;cursor:pointer;">تسجيل خروج</button>
+    </div>
+
+    <!-- Content -->
+    <div style="flex:1;padding:26px 30px 60px;overflow-x:hidden;">
+
+      <sc-if value="{{ isDashboard }}" hint-placeholder-val="{{ true }}">
+        <div data-screen-label="لوحة القيادة" style="animation:fadeIn 0.35s ease;">
+          <h2 style="font-size:20px;font-weight:800;color:#03045D;margin:0 0 4px;">لوحة القيادة التنفيذية</h2>
+          <p style="font-size:13px;color:#03045D;opacity:0.6;margin:0 0 22px;">نظرة عامة على المعرفة المؤسسية المتراكمة عبر الجهات الحكومية</p>
+
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:22px;">
+            <sc-for list="{{ kpiCards }}" as="k" hint-placeholder-count="4">
+              <div style="background:#fff;border-radius:14px;padding:20px;box-shadow:0 2px 14px rgba(3,4,93,0.06);border-top:3px solid {{ k.color }};">
+                <div style="font-size:12px;color:#03045D;opacity:0.6;font-weight:600;margin-bottom:8px;">{{ k.label }}</div>
+                <div style="font-size:28px;font-weight:800;color:#03045D;">{{ k.value }}</div>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:16px;margin-bottom:16px;">
+            <div style="background:#fff;border-radius:14px;padding:22px;box-shadow:0 2px 14px rgba(3,4,93,0.06);">
+              <div style="font-size:14px;font-weight:700;color:#03045D;margin-bottom:14px;">نمو المشاريع الموثقة شهريًا</div>
+              <svg viewBox="0 0 480 200" style="width:100%;height:200px;">
+                <line x1="30" y1="10" x2="30" y2="170" stroke="#B7C5E5" stroke-width="1"></line>
+                <line x1="30" y1="170" x2="470" y2="170" stroke="#B7C5E5" stroke-width="1"></line>
+                <polyline points="{{ linePoints }}" fill="none" stroke="#02A6BC" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></polyline>
+                <sc-for list="{{ lineDots }}" as="d" hint-placeholder-count="6">
+                  <circle cx="{{ d.x }}" cy="{{ d.y }}" r="4.5" fill="#A12B7E" stroke="#fff" stroke-width="1.5"></circle>
+                  <text x="{{ d.x }}" y="188" font-size="11" fill="#03045D" text-anchor="middle" opacity="0.6">{{ d.label }}</text>
+                </sc-for>
+              </svg>
+            </div>
+
+            <div style="background:#fff;border-radius:14px;padding:22px;box-shadow:0 2px 14px rgba(3,4,93,0.06);display:flex;gap:18px;align-items:center;">
+              <div style="position:relative;width:150px;height:150px;flex:none;">
+                <svg viewBox="0 0 160 160" style="width:150px;height:150px;transform:rotate(-90deg);">
+                  <sc-for list="{{ donutSegments }}" as="s" hint-placeholder-count="5">
+                    <circle cx="80" cy="80" r="64" fill="none" stroke="{{ s.color }}" stroke-width="24" stroke-dasharray="{{ s.dasharray }}" stroke-dashoffset="{{ s.dashoffset }}"></circle>
+                  </sc-for>
+                </svg>
+                <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+                  <div style="font-size:24px;font-weight:800;color:#03045D;">{{ kpiProjectsCount }}</div>
+                  <div style="font-size:10px;color:#03045D;opacity:0.6;">مشروعًا</div>
+                </div>
+              </div>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:13px;font-weight:700;color:#03045D;margin-bottom:10px;">حسب القطاع</div>
+                <sc-for list="{{ donutSegments }}" as="s" hint-placeholder-count="5">
+                  <div style="display:flex;align-items:center;gap:7px;margin-bottom:7px;">
+                    <span style="width:9px;height:9px;border-radius:3px;background:{{ s.color }};flex:none;"></span>
+                    <span style="font-size:11.5px;color:#03045D;opacity:0.8;flex:1;">{{ s.sector }}</span>
+                    <span style="font-size:11.5px;color:#03045D;font-weight:700;">{{ s.count }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:16px;">
+            <div style="background:#fff;border-radius:14px;padding:22px;box-shadow:0 2px 14px rgba(3,4,93,0.06);">
+              <div style="font-size:14px;font-weight:700;color:#03045D;margin-bottom:14px;">مشاركة الجهات حسب القطاع</div>
+              <sc-for list="{{ sectorParticipation }}" as="sp" hint-placeholder-count="5">
+                <div style="margin-bottom:14px;">
+                  <div style="display:flex;justify-content:space-between;font-size:12.5px;color:#03045D;margin-bottom:6px;">
+                    <span style="font-weight:600;">{{ sp.sector }}</span>
+                    <span style="opacity:0.6;">{{ sp.percentLabel }}</span>
+                  </div>
+                  <div style="height:8px;border-radius:5px;background:#F3F7FF;overflow:hidden;">
+                    <div style="height:100%;border-radius:5px;background:linear-gradient(90deg,#02A6BC,#03045D);width:{{ sp.percent }}%;"></div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+
+            <div style="background:#fff;border-radius:14px;padding:22px;box-shadow:0 2px 14px rgba(3,4,93,0.06);">
+              <div style="font-size:14px;font-weight:700;color:#03045D;margin-bottom:14px;">سجل نشاطات حديثة</div>
+              <sc-for list="{{ recentActivity }}" as="a" hint-placeholder-count="5">
+                <div style="padding:10px 0;border-top:1px solid rgba(3,4,93,0.06);">
+                  <div style="font-size:12.5px;color:#03045D;font-weight:600;">{{ a.actor }}</div>
+                  <div style="font-size:12px;color:#03045D;opacity:0.65;margin:2px 0;">{{ a.action }}</div>
+                  <div style="font-size:10.5px;color:#02A6BC;">{{ a.time }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isProjects }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="مكتبة المشاريع" style="animation:fadeIn 0.35s ease;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+            <div>
+              <h2 style="font-size:20px;font-weight:800;color:#03045D;margin:0 0 4px;">مكتبة المشاريع والمبادرات</h2>
+              <p style="font-size:13px;color:#03045D;opacity:0.6;margin:0;">الملف الموحد لكل مشروع أو مبادرة معرفية عبر الجهات</p>
+            </div>
+            <sc-if value="{{ canEdit }}" hint-placeholder-val="{{ false }}">
+              <button onclick="{{ openAddProject }}" style="padding:11px 20px;border-radius:10px;border:none;background:#03045D;color:#fff;font-size:13.5px;font-weight:700;cursor:pointer;white-space:nowrap;">+ إضافة مشروع</button>
+            </sc-if>
+          </div>
+
+          <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;">
+            <input value="{{ projSearch }}" oninput="{{ onProjSearch }}" placeholder="بحث بالاسم أو الجهة…" style="flex:1;min-width:220px;padding:10px 14px;border-radius:9px;border:1px solid rgba(3,4,93,0.15);font-size:13px;color:#03045D;">
+            <select value="{{ projSector }}" onchange="{{ onProjSectorFilter }}" style="padding:10px 14px;border-radius:9px;border:1px solid rgba(3,4,93,0.15);font-size:13px;color:#03045D;background:#fff;">
+              <option value="">كل القطاعات</option>
+              <sc-for list="{{ sectorOptions }}" as="s" hint-placeholder-count="6"><option value="{{ s }}">{{ s }}</option></sc-for>
+            </select>
+            <select value="{{ projStatus }}" onchange="{{ onProjStatusFilter }}" style="padding:10px 14px;border-radius:9px;border:1px solid rgba(3,4,93,0.15);font-size:13px;color:#03045D;background:#fff;">
+              <option value="">كل الحالات</option>
+              <option value="قيد التخطيط">قيد التخطيط</option>
+              <option value="قيد التنفيذ">قيد التنفيذ</option>
+              <option value="مكتمل">مكتمل</option>
+            </select>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;padding-bottom:70px;">
+            <sc-for list="{{ projectCards }}" as="p" hint-placeholder-count="6">
+              <div style="background:#fff;border-radius:14px;padding:18px;box-shadow:0 2px 14px rgba(3,4,93,0.06);border:1px solid rgba(3,4,93,0.05);display:flex;flex-direction:column;gap:10px;">
+                <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">
+                  <span style="font-size:11px;font-weight:700;padding:3px 9px;border-radius:6px;background:#F3F7FF;color:#03045D;">{{ p.type }}</span>
+                  <label style="display:flex;align-items:center;gap:5px;font-size:11px;color:#03045D;opacity:0.7;cursor:pointer;">
+                    <input type="checkbox" checked="{{ p.compareChecked }}" onchange="{{ p.onToggleCompare }}">
+                    قارن
+                  </label>
+                </div>
+                <div onclick="{{ p.onOpenDetail }}" style="font-size:15.5px;font-weight:800;color:#03045D;cursor:pointer;line-height:1.4;">{{ p.name }}</div>
+                <div style="font-size:12px;color:#03045D;opacity:0.65;">{{ p.owner }} · {{ p.sector }}</div>
+                <div style="font-size:12px;color:#03045D;opacity:0.75;line-height:1.6;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">{{ p.description }}</div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span style="font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;background:{{ p.statusBg }};color:{{ p.statusColor }};">{{ p.status }}</span>
+                  <div style="flex:1;height:6px;border-radius:4px;background:#F3F7FF;overflow:hidden;">
+                    <div style="height:100%;border-radius:4px;background:#02A6BC;width:{{ p.completion }}%;"></div>
+                  </div>
+                  <span style="font-size:11px;color:#03045D;opacity:0.6;">{{ p.completion }}٪</span>
+                </div>
+                <div style="display:flex;gap:8px;margin-top:4px;">
+                  <button onclick="{{ p.onOpenDetail }}" style="flex:1;padding:8px;border-radius:8px;border:1px solid rgba(3,4,93,0.15);background:#fff;color:#03045D;font-size:12px;font-weight:700;cursor:pointer;">التفاصيل</button>
+                  <sc-if value="{{ canEdit }}" hint-placeholder-val="{{ false }}">
+                    <button onclick="{{ p.onOpenEdit }}" style="flex:1;padding:8px;border-radius:8px;border:none;background:#F3F7FF;color:#03045D;font-size:12px;font-weight:700;cursor:pointer;">تعديل</button>
+                  </sc-if>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+
+          <sc-if value="{{ showCompareBar }}" hint-placeholder-val="{{ false }}">
+            <div style="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#03045D;color:#fff;padding:14px 22px;border-radius:14px;box-shadow:0 14px 40px rgba(3,4,93,0.4);display:flex;align-items:center;gap:16px;z-index:60;">
+              <span style="font-size:13px;font-weight:600;">تم اختيار مشروعين للمقارنة</span>
+              <button onclick="{{ openCompare }}" style="padding:9px 16px;border-radius:9px;border:none;background:#02A6BC;color:#03045D;font-size:12.5px;font-weight:800;cursor:pointer;">فتح المقارنة</button>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isLessons }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="الدروس المستفادة" style="animation:fadeIn 0.35s ease;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+            <div>
+              <h2 style="font-size:20px;font-weight:800;color:#03045D;margin:0 0 4px;">مستودع الدروس المستفادة</h2>
+              <p style="font-size:13px;color:#03045D;opacity:0.6;margin:0;">دروس موثقة ومرتبطة بمراحل المشاريع لتفادي تكرار الأخطاء</p>
+            </div>
+            <sc-if value="{{ canEdit }}" hint-placeholder-val="{{ false }}">
+              <button onclick="{{ openAddLesson }}" style="padding:11px 20px;border-radius:10px;border:none;background:#03045D;color:#fff;font-size:13.5px;font-weight:700;cursor:pointer;white-space:nowrap;">+ إضافة درس</button>
+            </sc-if>
+          </div>
+
+          <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;">
+            <input value="{{ lessonSearch }}" oninput="{{ onLessonSearch }}" placeholder="بحث في عنوان الدرس…" style="flex:1;min-width:220px;padding:10px 14px;border-radius:9px;border:1px solid rgba(3,4,93,0.15);font-size:13px;color:#03045D;">
+            <select value="{{ lessonCategory }}" onchange="{{ onLessonCategoryFilter }}" style="padding:10px 14px;border-radius:9px;border:1px solid rgba(3,4,93,0.15);font-size:13px;color:#03045D;background:#fff;">
+              <option value="">كل التصنيفات</option>
+              <sc-for list="{{ lessonCategoryOptions }}" as="c" hint-placeholder-count="5"><option value="{{ c }}">{{ c }}</option></sc-for>
+            </select>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:14px;padding-bottom:40px;">
+            <sc-for list="{{ lessonCards }}" as="l" hint-placeholder-count="4">
+              <div style="background:#fff;border-radius:14px;padding:20px;box-shadow:0 2px 14px rgba(3,4,93,0.06);">
+                <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:8px;">
+                  <div style="font-size:15.5px;font-weight:800;color:#03045D;line-height:1.4;">{{ l.title }}</div>
+                  <div style="display:flex;gap:6px;flex:none;">
+                    <span style="font-size:10.5px;font-weight:700;padding:4px 9px;border-radius:20px;background:{{ l.approvalBg }};color:{{ l.approvalColor }};white-space:nowrap;">{{ l.approvalStatus }}</span>
+                    <sc-if value="{{ l.reusable }}" hint-placeholder-val="{{ false }}">
+                      <span style="font-size:10.5px;font-weight:700;padding:4px 9px;border-radius:20px;background:#F3F7FF;color:#02A6BC;white-space:nowrap;">قابل لإعادة الاستخدام</span>
+                    </sc-if>
+                  </div>
+                </div>
+                <div style="font-size:12px;color:#02A6BC;font-weight:600;margin-bottom:12px;">{{ l.projectName }} · {{ l.phaseName }} · {{ l.category }}</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+                  <div><div style="font-size:11px;color:#A12B7E;font-weight:700;margin-bottom:3px;">سبب المشكلة</div><div style="font-size:12.5px;color:#03045D;opacity:0.8;line-height:1.6;">{{ l.cause }}</div></div>
+                  <div><div style="font-size:11px;color:#A12B7E;font-weight:700;margin-bottom:3px;">الإجراء المتخذ</div><div style="font-size:12.5px;color:#03045D;opacity:0.8;line-height:1.6;">{{ l.action }}</div></div>
+                  <div><div style="font-size:11px;color:#A12B7E;font-weight:700;margin-bottom:3px;">النتيجة</div><div style="font-size:12.5px;color:#03045D;opacity:0.8;line-height:1.6;">{{ l.result }}</div></div>
+                  <div><div style="font-size:11px;color:#A12B7E;font-weight:700;margin-bottom:3px;">التوصية</div><div style="font-size:12.5px;color:#03045D;opacity:0.8;line-height:1.6;">{{ l.recommendation }}</div></div>
+                </div>
+
+                <div style="display:flex;align-items:center;gap:14px;padding-top:12px;border-top:1px solid rgba(3,4,93,0.06);flex-wrap:wrap;">
+                  <div style="display:flex;align-items:center;gap:6px;">
+                    <button onclick="{{ l.onVoteUp }}" style="width:30px;height:30px;border-radius:8px;border:1px solid rgba(2,166,188,0.3);background:#fff;color:#02A6BC;font-size:14px;cursor:pointer;">▲</button>
+                    <button onclick="{{ l.onVoteDown }}" style="width:30px;height:30px;border-radius:8px;border:1px solid rgba(161,43,126,0.25);background:#fff;color:#A12B7E;font-size:14px;cursor:pointer;">▼</button>
+                  </div>
+                  <div style="flex:1;min-width:140px;">
+                    <sc-if value="{{ l.hasVotes }}" hint-placeholder-val="{{ false }}">
+                      <div style="display:flex;align-items:center;gap:8px;">
+                        <div style="flex:1;height:7px;border-radius:5px;background:#F3F7FF;overflow:hidden;"><div style="height:100%;background:#02A6BC;width:{{ l.usefulPercent }}%;"></div></div>
+                        <span style="font-size:11.5px;font-weight:700;color:#03045D;">{{ l.usefulPercent }}٪ مفيد</span>
+                      </div>
+                    </sc-if>
+                    <sc-if value="{{ l.noVotes }}" hint-placeholder-val="{{ true }}">
+                      <span style="font-size:11.5px;color:#03045D;opacity:0.45;">لا توجد تقييمات بعد</span>
+                    </sc-if>
+                  </div>
+                  <sc-if value="{{ l.showApprove }}" hint-placeholder-val="{{ false }}">
+                    <button onclick="{{ l.onApprove }}" style="padding:8px 14px;border-radius:8px;border:none;background:#03045D;color:#fff;font-size:12px;font-weight:700;cursor:pointer;">اعتماد</button>
+                  </sc-if>
+                  <button onclick="{{ l.onToggleRecommend }}" style="padding:8px 14px;border-radius:8px;border:1px solid rgba(3,4,93,0.15);background:#fff;color:#03045D;font-size:12px;font-weight:700;cursor:pointer;">أوصِ به لمشروع جديد</button>
+                </div>
+
+                <sc-if value="{{ l.recommendOpen }}" hint-placeholder-val="{{ false }}">
+                  <div style="margin-top:12px;padding:12px;background:#F3F7FF;border-radius:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+                    <select value="{{ l.recommendTarget }}" onchange="{{ l.onSetRecommendTarget }}" style="flex:1;min-width:180px;padding:8px 12px;border-radius:8px;border:1px solid rgba(3,4,93,0.15);font-size:12.5px;color:#03045D;">
+                      <option value="">اختر المشروع المستهدف…</option>
+                      <sc-for list="{{ allProjectOptions }}" as="op" hint-placeholder-count="6"><option value="{{ op.id }}">{{ op.name }}</option></sc-for>
+                    </select>
+                    <button onclick="{{ l.onConfirmRecommend }}" style="padding:8px 16px;border-radius:8px;border:none;background:#02A6BC;color:#fff;font-size:12px;font-weight:700;cursor:pointer;">تأكيد التوصية</button>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isLibrary }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="مكتبة المعرفة الرقمية" style="animation:fadeIn 0.35s ease;">
+          <h2 style="font-size:20px;font-weight:800;color:#03045D;margin:0 0 4px;">مكتبة المعرفة الرقمية</h2>
+          <p style="font-size:13px;color:#03045D;opacity:0.6;margin:0 0 20px;">الأدلة، السياسات، الإجراءات، والمعايير الموحدة المتاحة لجميع الجهات الحكومية</p>
+
+          <div style="display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap;">
+            <input value="{{ librarySearch }}" oninput="{{ onLibrarySearch }}" placeholder="بحث في مكتبة المعرفة…" style="flex:1;min-width:220px;padding:10px 14px;border-radius:9px;border:1px solid rgba(3,4,93,0.15);font-size:13px;color:#03045D;">
+          </div>
+
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px;">
+            <sc-for list="{{ libraryCategoryChips }}" as="lc" hint-placeholder-count="10">
+              <button onclick="{{ lc.onClick }}" style="{{ lc.style }}">{{ lc.label }}</button>
+            </sc-for>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;">
+            <sc-for list="{{ libraryDocs }}" as="d" hint-placeholder-count="8">
+              <div style="background:#fff;border-radius:14px;padding:18px;box-shadow:0 2px 14px rgba(3,4,93,0.06);display:flex;flex-direction:column;gap:9px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;">
+                  <span style="font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:6px;background:#F3F7FF;color:#02A6BC;">{{ d.category }}</span>
+                  <span style="font-size:10.5px;font-weight:700;color:#03045D;opacity:0.5;">{{ d.type }}</span>
+                </div>
+                <div style="font-size:14px;font-weight:700;color:#03045D;line-height:1.5;">{{ d.title }}</div>
+                <div style="font-size:11.5px;color:#03045D;opacity:0.6;">{{ d.owner }}</div>
+                <div style="font-size:10.5px;color:#02A6BC;">آخر تحديث: {{ d.updated }}</div>
+                <button onclick="{{ d.onOpen }}" style="margin-top:6px;padding:9px;border-radius:9px;border:none;background:#F3F7FF;color:#03045D;font-size:12.5px;font-weight:700;cursor:pointer;">📄 فتح المستند</button>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isExperts }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="دليل الخبراء" style="animation:fadeIn 0.35s ease;">
+          <h2 style="font-size:20px;font-weight:800;color:#03045D;margin:0 0 4px;">دليل الخبراء</h2>
+          <p style="font-size:13px;color:#03045D;opacity:0.6;margin:0 0 22px;">خبراء موثقون عبر الجهات الحكومية حسب مجال التخصص</p>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;">
+            <sc-for list="{{ expertCards }}" as="e" hint-placeholder-count="6">
+              <div style="background:#fff;border-radius:14px;padding:20px;box-shadow:0 2px 14px rgba(3,4,93,0.06);display:flex;flex-direction:column;gap:8px;">
+                <div style="width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#03045D,#A12B7E);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;margin-bottom:6px;">{{ e.initial }}</div>
+                <div style="font-size:15px;font-weight:800;color:#03045D;">{{ e.name }}</div>
+                <div style="font-size:12px;color:#02A6BC;font-weight:600;">{{ e.specialty }}</div>
+                <div style="font-size:11.5px;color:#03045D;opacity:0.6;">{{ e.org }} · {{ e.years }} سنوات خبرة</div>
+                <div style="display:flex;gap:6px;flex-wrap:wrap;margin:6px 0;">
+                  <sc-for list="{{ e.skillChips }}" as="sk" hint-placeholder-count="3">
+                    <span style="font-size:10.5px;padding:4px 9px;border-radius:20px;background:#F3F7FF;color:#03045D;opacity:0.8;">{{ sk }}</span>
+                  </sc-for>
+                </div>
+                <button onclick="{{ e.onContact }}" style="margin-top:6px;padding:9px;border-radius:9px;border:none;background:#F3F7FF;color:#03045D;font-size:12.5px;font-weight:700;cursor:pointer;">تواصل مع الخبير</button>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isCommunity }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="مجتمع الممارسة" style="animation:fadeIn 0.35s ease;">
+          <sc-if value="{{ activeQuestionNull }}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+              <div>
+                <h2 style="font-size:20px;font-weight:800;color:#03045D;margin:0 0 4px;">مجتمع الممارسة</h2>
+                <p style="font-size:13px;color:#03045D;opacity:0.6;margin:0;">اسأل، أجب، وشارك خبرتك مع بقية الجهات الحكومية</p>
+              </div>
+              <button onclick="{{ openNewQuestion }}" style="padding:11px 20px;border-radius:10px;border:none;background:#03045D;color:#fff;font-size:13.5px;font-weight:700;cursor:pointer;white-space:nowrap;">+ سؤال جديد</button>
+            </div>
+            <div style="display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap;">
+              <input value="{{ questionSearch }}" oninput="{{ onQuestionSearch }}" placeholder="ابحث في الأسئلة…" style="flex:1;min-width:220px;padding:10px 14px;border-radius:9px;border:1px solid rgba(3,4,93,0.15);font-size:13px;color:#03045D;">
+              <div style="display:flex;gap:6px;">
+                <sc-for list="{{ sortOptions }}" as="so" hint-placeholder-count="3">
+                  <button onclick="{{ so.onClick }}" style="{{ so.style }}">{{ so.label }}</button>
+                </sc-for>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <sc-for list="{{ questionRows }}" as="q" hint-placeholder-count="5">
+                <div onclick="{{ q.onOpen }}" style="background:#fff;border-radius:12px;padding:16px 18px;box-shadow:0 2px 14px rgba(3,4,93,0.06);display:flex;gap:18px;align-items:center;cursor:pointer;">
+                  <div style="display:flex;flex-direction:column;align-items:center;gap:2px;flex:none;width:56px;">
+                    <span style="font-size:15px;font-weight:800;color:#03045D;">{{ q.votes }}</span>
+                    <span style="font-size:10px;color:#03045D;opacity:0.5;">أصوات</span>
+                  </div>
+                  <div style="display:flex;flex-direction:column;align-items:center;gap:2px;flex:none;width:56px;">
+                    <span style="font-size:15px;font-weight:800;color:{{ q.answerColor }};">{{ q.answerCount }}</span>
+                    <span style="font-size:10px;color:#03045D;opacity:0.5;">إجابات</span>
+                  </div>
+                  <div style="display:flex;flex-direction:column;align-items:center;gap:2px;flex:none;width:56px;">
+                    <span style="font-size:15px;font-weight:800;color:#03045D;opacity:0.6;">{{ q.views }}</span>
+                    <span style="font-size:10px;color:#03045D;opacity:0.5;">مشاهدة</span>
+                  </div>
+                  <div style="flex:1;min-width:0;">
+                    <div style="font-size:14.5px;font-weight:700;color:#03045D;margin-bottom:5px;">{{ q.title }}</div>
+                    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:4px;">
+                      <sc-for list="{{ q.tagChips }}" as="tg" hint-placeholder-count="2">
+                        <span style="font-size:10.5px;padding:3px 9px;border-radius:20px;background:#F3F7FF;color:#02A6BC;">{{ tg }}</span>
+                      </sc-for>
+                    </div>
+                    <div style="font-size:11px;color:#03045D;opacity:0.5;">{{ q.author }} · {{ q.timeLabel }}</div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ activeQuestion }}" hint-placeholder-val="{{ false }}">
+            <button onclick="{{ closeQuestion }}" style="margin-bottom:16px;padding:8px 14px;border-radius:8px;border:1px solid rgba(3,4,93,0.15);background:#fff;color:#03045D;font-size:12.5px;font-weight:700;cursor:pointer;">→ الرجوع لقائمة الأسئلة</button>
+            <div style="background:#fff;border-radius:14px;padding:24px;box-shadow:0 2px 14px rgba(3,4,93,0.06);margin-bottom:16px;">
+              <h2 style="font-size:19px;font-weight:800;color:#03045D;margin:0 0 10px;">{{ activeQuestion.title }}</h2>
+              <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;">
+                <sc-for list="{{ activeQuestion.tagChips }}" as="tg" hint-placeholder-count="2">
+                  <span style="font-size:11px;padding:4px 10px;border-radius:20px;background:#F3F7FF;color:#02A6BC;">{{ tg }}</span>
+                </sc-for>
+              </div>
+              <p style="font-size:14px;color:#03045D;opacity:0.85;line-height:1.8;margin:0 0 12px;">{{ activeQuestion.body }}</p>
+              <div style="font-size:11.5px;color:#03045D;opacity:0.5;">بواسطة {{ activeQuestion.author }} · {{ activeQuestion.timeLabel }} · {{ activeQuestion.views }} مشاهدة</div>
+            </div>
+
+            <div style="font-size:14.5px;font-weight:800;color:#03045D;margin-bottom:12px;">{{ activeQuestion.answerCount }} إجابة</div>
+            <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px;">
+              <sc-for list="{{ activeQuestion.answerRows }}" as="an" hint-placeholder-count="2">
+                <div style="background:{{ an.bg }};border-radius:12px;padding:16px 18px;border:1px solid {{ an.border }};">
+                  <sc-if value="{{ an.accepted }}" hint-placeholder-val="{{ false }}">
+                    <div style="font-size:11px;font-weight:800;color:#02A6BC;margin-bottom:8px;">✓ إجابة معتمدة</div>
+                  </sc-if>
+                  <p style="font-size:13.5px;color:#03045D;line-height:1.8;margin:0 0 10px;">{{ an.body }}</p>
+                  <div style="display:flex;align-items:center;justify-content:space-between;">
+                    <div style="font-size:11.5px;color:#03045D;opacity:0.55;">{{ an.author }} · {{ an.votes }} صوت</div>
+                    <sc-if value="{{ an.showAccept }}" hint-placeholder-val="{{ false }}">
+                      <button onclick="{{ an.onAccept }}" style="padding:6px 12px;border-radius:8px;border:none;background:#F3F7FF;color:#03045D;font-size:11px;font-weight:700;cursor:pointer;">اعتماد كإجابة</button>
+                    </sc-if>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+
+            <div style="background:#fff;border-radius:14px;padding:20px;box-shadow:0 2px 14px rgba(3,4,93,0.06);">
+              <div style="font-size:13.5px;font-weight:700;color:#03045D;margin-bottom:10px;">أضف إجابتك</div>
+              <textarea value="{{ newAnswerText }}" oninput="{{ onNewAnswerInput }}" placeholder="اكتب إجابتك هنا…" style="width:100%;min-height:90px;padding:12px 14px;border-radius:10px;border:1px solid rgba(3,4,93,0.15);font-size:13px;color:#03045D;resize:vertical;margin-bottom:10px;"></textarea>
+              <button onclick="{{ submitAnswer }}" style="padding:10px 20px;border-radius:9px;border:none;background:#03045D;color:#fff;font-size:13px;font-weight:700;cursor:pointer;">نشر الإجابة</button>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isAssistant }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="المساعد المعرفي" style="animation:fadeIn 0.35s ease;max-width:760px;margin:0 auto;">
+          <h2 style="font-size:20px;font-weight:800;color:#03045D;margin:0 0 4px;">المساعد المعرفي الذكي</h2>
+          <p style="font-size:13px;color:#03045D;opacity:0.6;margin:0 0 20px;">اسأل عن مشاريع سابقة أو خبراء متخصصين واحصل على توصيات فورية</p>
+
+          <div style="background:#fff;border-radius:16px;box-shadow:0 2px 14px rgba(3,4,93,0.06);display:flex;flex-direction:column;height:520px;overflow:hidden;">
+            <div style="flex:1;overflow-y:auto;padding:22px;display:flex;flex-direction:column;gap:14px;">
+              <sc-for list="{{ chatBubbles }}" as="m" hint-placeholder-count="3">
+                <div style="max-width:78%;align-self:{{ m.align }};background:{{ m.bg }};color:{{ m.color }};padding:12px 16px;border-radius:14px;font-size:13.5px;line-height:1.8;white-space:pre-line;">{{ m.text }}</div>
+              </sc-for>
+            </div>
+            <div style="padding:14px 22px;display:flex;gap:8px;flex-wrap:wrap;border-top:1px solid rgba(3,4,93,0.06);">
+              <sc-for list="{{ suggestedChips }}" as="sc" hint-placeholder-count="3">
+                <button onclick="{{ sc.onClick }}" style="padding:8px 14px;border-radius:20px;border:1px solid rgba(2,166,188,0.3);background:#F3F7FF;color:#02A6BC;font-size:11.5px;font-weight:600;cursor:pointer;">{{ sc.label }}</button>
+              </sc-for>
+            </div>
+            <div style="padding:16px 22px;border-top:1px solid rgba(3,4,93,0.08);display:flex;gap:10px;">
+              <input value="{{ chatInput }}" oninput="{{ onChatInput }}" onkeydown="{{ onChatKeydown }}" placeholder="اكتب سؤالك هنا…" style="flex:1;padding:12px 16px;border-radius:10px;border:1px solid rgba(3,4,93,0.15);font-size:13.5px;color:#03045D;">
+              <button onclick="{{ sendChat }}" style="padding:12px 22px;border-radius:10px;border:none;background:#03045D;color:#fff;font-size:13px;font-weight:700;cursor:pointer;">إرسال</button>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isAdminSection }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="الإدارة والحوكمة" style="animation:fadeIn 0.35s ease;">
+          <h2 style="font-size:20px;font-weight:800;color:#03045D;margin:0 0 4px;">الإدارة والحوكمة</h2>
+          <p style="font-size:13px;color:#03045D;opacity:0.6;margin:0 0 22px;">الأدوار، تصنيف حساسية البيانات، وسجل التدقيق — متاحة لمدير النظام فقط</p>
+
+          <div style="background:#fff;border-radius:14px;padding:22px;box-shadow:0 2px 14px rgba(3,4,93,0.06);margin-bottom:18px;">
+            <div style="font-size:15px;font-weight:800;color:#03045D;margin-bottom:14px;">الأدوار والصلاحيات</div>
+            <sc-for list="{{ roleRows }}" as="r" hint-placeholder-count="4">
+              <div style="padding:12px 0;border-top:1px solid rgba(3,4,93,0.06);">
+                <div style="font-size:13.5px;font-weight:700;color:#03045D;margin-bottom:6px;">{{ r.label }}</div>
+                <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                  <sc-for list="{{ r.permChips }}" as="pc" hint-placeholder-count="3">
+                    <span style="font-size:11px;padding:4px 10px;border-radius:20px;background:#F3F7FF;color:#03045D;opacity:0.75;">{{ pc }}</span>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div style="background:#fff;border-radius:14px;padding:22px;box-shadow:0 2px 14px rgba(3,4,93,0.06);">
+              <div style="font-size:15px;font-weight:800;color:#03045D;margin-bottom:14px;">تصنيف حساسية البيانات</div>
+              <sc-for list="{{ classificationRows }}" as="cl" hint-placeholder-count="3">
+                <div style="padding:12px 0;border-top:1px solid rgba(3,4,93,0.06);">
+                  <span style="font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;background:{{ cl.bg }};color:{{ cl.color }};">{{ cl.label }}</span>
+                  <div style="font-size:12.5px;color:#03045D;opacity:0.7;margin-top:8px;line-height:1.7;">{{ cl.description }}</div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="background:#fff;border-radius:14px;padding:22px;box-shadow:0 2px 14px rgba(3,4,93,0.06);">
+              <div style="font-size:15px;font-weight:800;color:#03045D;margin-bottom:14px;">سجل التدقيق (Audit Log)</div>
+              <sc-for list="{{ auditRows }}" as="au" hint-placeholder-count="5">
+                <div style="padding:10px 0;border-top:1px solid rgba(3,4,93,0.06);">
+                  <div style="font-size:12.5px;font-weight:700;color:#03045D;">{{ au.actor }}</div>
+                  <div style="font-size:12px;color:#03045D;opacity:0.65;margin:2px 0;">{{ au.action }}</div>
+                  <div style="font-size:10.5px;color:#02A6BC;">{{ au.time }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+    </div>
+  </div>
+
+  <!-- Project detail slide-over -->
+  <sc-if value="{{ detailProject }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;background:rgba(3,4,93,0.35);z-index:100;display:flex;justify-content:flex-end;" onclick="{{ closeDetailBackdrop }}">
+      <div onclick="{{ stopClick }}" style="width:520px;max-width:92vw;background:#fff;height:100vh;overflow-y:auto;padding:28px;box-shadow:-20px 0 60px rgba(3,4,93,0.3);animation:slideIn 0.25s ease;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;">
+          <div>
+            <span style="font-size:11px;font-weight:700;padding:3px 9px;border-radius:6px;background:#F3F7FF;color:#03045D;">{{ detailProject.type }}</span>
+            <h2 style="font-size:19px;font-weight:800;color:#03045D;margin:10px 0 4px;">{{ detailProject.name }}</h2>
+            <div style="font-size:12.5px;color:#02A6BC;font-weight:600;">{{ detailProject.owner }} · {{ detailProject.sector }}</div>
+          </div>
+          <button onclick="{{ closeDetail }}" style="width:34px;height:34px;border-radius:9px;border:none;background:#F3F7FF;color:#03045D;font-size:16px;cursor:pointer;">✕</button>
+        </div>
+
+        <p style="font-size:13.5px;color:#03045D;opacity:0.8;line-height:1.8;margin:0 0 18px;">{{ detailProject.description }}</p>
+
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
+          <span style="font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;background:{{ detailProject.statusBg }};color:{{ detailProject.statusColor }};">{{ detailProject.status }}</span>
+          <div style="flex:1;height:7px;border-radius:5px;background:#F3F7FF;overflow:hidden;"><div style="height:100%;background:#02A6BC;width:{{ detailProject.completion }}%;"></div></div>
+          <span style="font-size:11.5px;color:#03045D;font-weight:700;">{{ detailProject.completion }}٪</span>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;">
+          <div><div style="font-size:11px;color:#A12B7E;font-weight:700;margin-bottom:4px;">الميزانية</div><div style="font-size:13px;color:#03045D;">{{ detailProject.budget }}</div></div>
+          <div><div style="font-size:11px;color:#A12B7E;font-weight:700;margin-bottom:4px;">مدة التنفيذ</div><div style="font-size:13px;color:#03045D;">{{ detailProject.duration }}</div></div>
+          <div style="grid-column:span 2;"><div style="font-size:11px;color:#A12B7E;font-weight:700;margin-bottom:4px;">الربط بالاستراتيجية الوطنية</div><div style="font-size:13px;color:#03045D;">{{ detailProject.strategyLink }}</div></div>
+        </div>
+
+        <div style="margin-bottom:16px;">
+          <div style="font-size:12px;color:#A12B7E;font-weight:700;margin-bottom:6px;">الأهداف</div>
+          <sc-for list="{{ detailProject.goalsList }}" as="g" hint-placeholder-count="3"><div style="font-size:12.5px;color:#03045D;opacity:0.8;padding:3px 0;">• {{ g }}</div></sc-for>
+        </div>
+        <div style="margin-bottom:16px;">
+          <div style="font-size:12px;color:#A12B7E;font-weight:700;margin-bottom:6px;">مؤشرات النجاح</div>
+          <sc-for list="{{ detailProject.successList }}" as="g" hint-placeholder-count="3"><div style="font-size:12.5px;color:#03045D;opacity:0.8;padding:3px 0;">• {{ g }}</div></sc-for>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;">
+          <sc-for list="{{ detailProject.techChips }}" as="t" hint-placeholder-count="3"><span style="font-size:11px;padding:4px 10px;border-radius:20px;background:#F3F7FF;color:#02A6BC;">{{ t }}</span></sc-for>
+        </div>
+
+        <div style="margin-bottom:16px;">
+          <div style="font-size:12px;color:#A12B7E;font-weight:700;margin-bottom:8px;">مراحل المشروع</div>
+          <sc-for list="{{ detailProject.phaseRows }}" as="ph" hint-placeholder-count="4">
+            <div style="display:flex;align-items:center;gap:10px;padding:7px 0;">
+              <span style="width:9px;height:9px;border-radius:50%;background:{{ ph.dotColor }};flex:none;"></span>
+              <span style="font-size:12.5px;color:#03045D;flex:1;">{{ ph.name }}</span>
+              <span style="font-size:10.5px;font-weight:700;color:{{ ph.dotColor }};">{{ ph.status }}</span>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="margin-bottom:16px;">
+          <div style="font-size:12px;color:#A12B7E;font-weight:700;margin-bottom:8px;">التحديات والحلول</div>
+          <sc-for list="{{ detailProject.challengeRows }}" as="ch" hint-placeholder-count="2">
+            <div style="background:#F3F7FF;border-radius:10px;padding:10px 12px;margin-bottom:8px;">
+              <div style="font-size:12px;color:#03045D;font-weight:700;margin-bottom:3px;">التحدي: {{ ch.challenge }}</div>
+              <div style="font-size:12px;color:#03045D;opacity:0.75;">الحل: {{ ch.solution }}</div>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="margin-bottom:16px;">
+          <div style="font-size:12px;color:#A12B7E;font-weight:700;margin-bottom:8px;">فريق إدارة المشروع</div>
+          <sc-for list="{{ detailProject.teamRows }}" as="tm" hint-placeholder-count="2">
+            <div style="font-size:12.5px;color:#03045D;padding:3px 0;">{{ tm.name }} — <span style="opacity:0.65;">{{ tm.role }}</span></div>
+          </sc-for>
+        </div>
+
+        <div style="margin-bottom:16px;">
+          <div style="font-size:12px;color:#A12B7E;font-weight:700;margin-bottom:8px;">الشركاء</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <sc-for list="{{ detailProject.partnerChips }}" as="pt" hint-placeholder-count="2"><span style="font-size:11px;padding:4px 10px;border-radius:20px;background:#F3F7FF;color:#03045D;">{{ pt }}</span></sc-for>
+          </div>
+        </div>
+
+        <div style="margin-bottom:16px;">
+          <div style="font-size:12px;color:#A12B7E;font-weight:700;margin-bottom:8px;">الوثائق المرفقة</div>
+          <sc-for list="{{ detailProject.docRows }}" as="dc" hint-placeholder-count="2"><div style="font-size:12.5px;color:#03045D;opacity:0.75;padding:3px 0;">📄 {{ dc }}</div></sc-for>
+        </div>
+
+        <sc-if value="{{ detailProject.hasContracts }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-bottom:16px;">
+            <div style="font-size:12px;color:#A12B7E;font-weight:700;margin-bottom:8px;">العقود والموردون</div>
+            <sc-for list="{{ detailProject.contractRows }}" as="ct" hint-placeholder-count="2"><div style="font-size:12.5px;color:#03045D;opacity:0.75;padding:3px 0;">🗂 {{ ct }}</div></sc-for>
+          </div>
+        </sc-if>
+
+        <div style="border-top:1px solid rgba(3,4,93,0.08);padding-top:16px;">
+          <div style="font-size:13px;font-weight:800;color:#03045D;margin-bottom:10px;">مشاريع مشابهة (نفس القطاع)</div>
+          <sc-for list="{{ detailProject.similarRows }}" as="sim" hint-placeholder-count="2">
+            <div onclick="{{ sim.onOpen }}" style="padding:10px 12px;border-radius:10px;background:#F3F7FF;margin-bottom:8px;cursor:pointer;">
+              <div style="font-size:12.5px;font-weight:700;color:#03045D;">{{ sim.name }}</div>
+              <div style="font-size:11px;color:#03045D;opacity:0.6;">{{ sim.owner }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- Compare modal -->
+  <sc-if value="{{ compareOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;background:rgba(3,4,93,0.4);z-index:110;display:flex;align-items:center;justify-content:center;padding:20px;" onclick="{{ closeCompare }}">
+      <div onclick="{{ stopClick }}" style="width:820px;max-width:100%;max-height:88vh;overflow-y:auto;background:#fff;border-radius:16px;padding:26px;box-shadow:0 30px 80px rgba(3,4,93,0.4);">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
+          <h2 style="font-size:18px;font-weight:800;color:#03045D;margin:0;">مقارنة المشاريع</h2>
+          <button onclick="{{ closeCompare }}" style="width:32px;height:32px;border-radius:8px;border:none;background:#F3F7FF;color:#03045D;cursor:pointer;">✕</button>
+        </div>
+        <table style="width:100%;border-collapse:collapse;">
+          <thead>
+            <tr>
+              <td style="padding:10px;font-size:12px;color:#03045D;opacity:0.5;width:140px;"></td>
+              <sc-for list="{{ compareProjects }}" as="cp" hint-placeholder-count="2">
+                <td style="padding:10px;font-size:14px;font-weight:800;color:#03045D;border-bottom:2px solid #02A6BC;">{{ cp.name }}</td>
+              </sc-for>
+            </tr>
+          </thead>
+          <tbody>
+            <sc-for list="{{ compareFieldRows }}" as="fr" hint-placeholder-count="6">
+              <tr>
+                <td style="padding:10px;font-size:12px;font-weight:700;color:#A12B7E;border-bottom:1px solid rgba(3,4,93,0.06);white-space:nowrap;">{{ fr.label }}</td>
+                <td style="padding:10px;font-size:12.5px;color:#03045D;border-bottom:1px solid rgba(3,4,93,0.06);">{{ fr.a }}</td>
+                <td style="padding:10px;font-size:12.5px;color:#03045D;border-bottom:1px solid rgba(3,4,93,0.06);">{{ fr.b }}</td>
+              </tr>
+            </sc-for>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- Project add/edit modal -->
+  <sc-if value="{{ projModalOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;background:rgba(3,4,93,0.4);z-index:110;display:flex;align-items:center;justify-content:center;padding:20px;" onclick="{{ closeProjectModal }}">
+      <div onclick="{{ stopClick }}" style="width:760px;max-width:100%;max-height:90vh;overflow-y:auto;background:#fff;border-radius:16px;padding:28px;box-shadow:0 30px 80px rgba(3,4,93,0.4);">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+          <h2 style="font-size:18px;font-weight:800;color:#03045D;margin:0;">{{ projModalTitle }}</h2>
+          <button onclick="{{ closeProjectModal }}" style="width:32px;height:32px;border-radius:8px;border:none;background:#F3F7FF;color:#03045D;cursor:pointer;">✕</button>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+          <div style="grid-column:span 2;">
+            <label style="font-size:12px;font-weight:700;color:#03045D;display:block;margin-bottom:5px;">اسم المشروع</label>
+            <input value="{{ projForm.name }}" oninput="{{ onFormName }}" style="width:100%;padding:10px 12px;border-radius:9px;border:1px solid rgba(3,4,93,0.15);font-size:13px;color:#03045D;">
+          </div>
+          <div>
+            <label style="font-size:12px;font-weight:700;color:#03045D;display:block;margin-bottom:5px;">النوع</label>
+            <select value="{{ projForm.type }}" onchange="{{ onFormType }}" style="width:100%;padding:10px 12px;border-radius:9px;border:1px solid rgba(3,4,93,0.15);font-size:13px;color:#03045D;background:#fff;">
+              <option value="مشروع">مشروع</option><option value="مبادرة">مبادرة</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:12px;font-weight:700;color:#03045D;display:block;margin-bottom:5px;">الحالة</label>
+            <select value="{{ projForm.status }}" onchange="{{ onFormStatus }}" style="width:100%;padding:10px 12px;border-radius:9px;border:1px solid rgba(3,4,93,0.15);font-size:13px;color:#03045D;background:#fff;">
+              <option value="قيد التخطيط">قيد التخطيط</option><option value="قيد التنفيذ">قيد التنفيذ</option><option value="مكتمل">مكتمل</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:12px;font-weight:700;color:#03045D;display:block;margin-bottom:5px;">الجهة المالكة</label>
+            <select value="{{ projForm.owner }}" onchange="{{ onFormOwner }}" style="width:100%;padding:10px 12px;border-radius:9px;border:1px solid rgba(3,4,93,0.15);font-size:13px;color:#03045D;background:#fff;">
+              <sc-for list="{{ entityOptions }}" as="en" hint-placeholder-count="6"><option value="{{ en }}">{{ en }}</option></sc-for>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:12px;font-weight:700;color:#03045D;display:block;margin-bottom:5px;">القطاع</label>
+            <select value="{{ projForm.sector }}" onchange="{{ onFormSector }}" style="width:100%;padding:10px 12px;border-radius:9px;border:1px solid rgba(3,4,93,0.15);font-size:13px;color:#03045D;background:#fff;">
+              <sc-for list="{{ sectorOptions }}" as="s2" hint-placeholder-count="6"><option value="{{ s2 }}">{{ s2 }}</option></sc-for>
+            </select>
+          </div>
+          <div style="grid-column:span 2;">
+            <label style="font-size:12px;font-weight:700;color:#03045D;display:block;margin-bottom:5px;">الوصف</label>
+            <textarea value="{{ projForm.description }}" oninput="{{ onFormDescription }}" style="width:100%;min-height:70px;padding:10px 12px;border-radius:9px;border:1px solid rgba(3,4,93,0.15);font-size:13px;color:#03045D;resize:vertical;"></textarea>
+          </div>
+          <div>
+            <label style="font-size:12px;font-weight:700;color:#03045D;display:block;margin-bottom:5px;">الميزانية</label>
+            <input value="{{ projForm.budget }}" oninput="{{ onFormBudget }}" style="width:100%;padding:10px 12px;border-radius:9px;border:1px solid rgba(3,4,93,0.15);font-size:13px;color:#03045D;">
+          </div>
+          <div>
+            <label style="font-size:12px;font-weight:700;color:#03045D;display:block;margin-bottom:5px;">مدة التنفيذ</label>
+            <input value="{{ projForm.duration }}" oninput="{{ onFormDuration }}" style="width:100%;padding:10px 12px;border-radius:9px;border:1px solid rgba(3,4,93,0.15);font-size:13px;color:#03045D;">
+          </div>
+          <div>
+            <label style="font-size:12px;font-weight:700;color:#03045D;display:block;margin-bottom:5px;">نسبة الإنجاز (٪)</label>
+            <input type="number" value="{{ projForm.completion }}" oninput="{{ onFormCompletion }}" style="width:100%;padding:10px 12px;border-radius:9px;border:1px solid rgba(3,4,93,0.15);font-size:13px;color:#03045D;">
+          </div>
+          <div>
+            <label style="font-size:12px;font-weight:700;color:#03045D;display:block;margin-bottom:5px;">الربط بالاستراتيجية الوطنية</label>
+            <input value="{{ projForm.strategyLink }}" oninput="{{ onFormStrategy }}" style="width:100%;padding:10px 12px;border-radius:9px;border:1px solid rgba(3,4,93,0.15);font-size:13px;color:#03045D;">
+          </div>
+
+          <div style="grid-column:span 2;"><label style="font-size:12px;font-weight:700;color:#03045D;display:block;margin-bottom:5px;">الأهداف (سطر لكل هدف)</label><textarea value="{{ projForm.goals }}" oninput="{{ onFormGoals }}" style="width:100%;min-height:60px;padding:10px 12px;border-radius:9px;border:1px solid rgba(3,4,93,0.15);font-size:13px;color:#03045D;resize:vertical;"></textarea></div>
+          <div><label style="font-size:12px;font-weight:700;color:#03045D;display:block;margin-bottom:5px;">التقنيات المستخدمة (سطر لكل تقنية)</label><textarea value="{{ projForm.technologies }}" oninput="{{ onFormTech }}" style="width:100%;min-height:60px;padding:10px 12px;border-radius:9px;border:1px solid rgba(3,4,93,0.15);font-size:13px;color:#03045D;resize:vertical;"></textarea></div>
+          <div><label style="font-size:12px;font-weight:700;color:#03045D;display:block;margin-bottom:5px;">الشركاء (سطر لكل جهة)</label><textarea value="{{ projForm.partners }}" oninput="{{ onFormPartners }}" style="width:100%;min-height:60px;padding:10px 12px;border-radius:9px;border:1px solid rgba(3,4,93,0.15);font-size:13px;color:#03045D;resize:vertical;"></textarea></div>
+          <div style="grid-column:span 2;"><label style="font-size:12px;font-weight:700;color:#03045D;display:block;margin-bottom:5px;">مؤشرات النجاح (سطر لكل مؤشر)</label><textarea value="{{ projForm.successIndicators }}" oninput="{{ onFormSuccess }}" style="width:100%;min-height:60px;padding:10px 12px;border-radius:9px;border:1px solid rgba(3,4,93,0.15);font-size:13px;color:#03045D;resize:vertical;"></textarea></div>
+          <div><label style="font-size:12px;font-weight:700;color:#03045D;display:block;margin-bottom:5px;">فريق إدارة المشروع (الاسم - الدور، سطر لكل عضو)</label><textarea value="{{ projForm.team }}" oninput="{{ onFormTeam }}" style="width:100%;min-height:60px;padding:10px 12px;border-radius:9px;border:1px solid rgba(3,4,93,0.15);font-size:13px;color:#03045D;resize:vertical;"></textarea></div>
+          <div><label style="font-size:12px;font-weight:700;color:#03045D;display:block;margin-bottom:5px;">الوثائق المرفقة (سطر لكل ملف)</label><textarea value="{{ projForm.documents }}" oninput="{{ onFormDocs }}" style="width:100%;min-height:60px;padding:10px 12px;border-radius:9px;border:1px solid rgba(3,4,93,0.15);font-size:13px;color:#03045D;resize:vertical;"></textarea></div>
+          <div style="grid-column:span 2;"><label style="font-size:12px;font-weight:700;color:#03045D;display:block;margin-bottom:5px;">العقود والموردون (اختياري، سطر لكل عقد)</label><textarea value="{{ projForm.contracts }}" oninput="{{ onFormContracts }}" style="width:100%;min-height:50px;padding:10px 12px;border-radius:9px;border:1px solid rgba(3,4,93,0.15);font-size:13px;color:#03045D;resize:vertical;"></textarea></div>
+        </div>
+
+        <div style="margin-bottom:14px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <label style="font-size:12.5px;font-weight:800;color:#03045D;">مراحل المشروع</label>
+            <button onclick="{{ addPhaseRow }}" style="padding:6px 12px;border-radius:7px;border:none;background:#F3F7FF;color:#03045D;font-size:11.5px;font-weight:700;cursor:pointer;">+ إضافة مرحلة</button>
+          </div>
+          <sc-for list="{{ formPhasesView }}" as="fp" hint-placeholder-count="3">
+            <div style="display:flex;gap:8px;margin-bottom:8px;">
+              <input value="{{ fp.name }}" oninput="{{ fp.onNameChange }}" placeholder="اسم المرحلة" style="flex:1;padding:9px 12px;border-radius:8px;border:1px solid rgba(3,4,93,0.15);font-size:12.5px;color:#03045D;">
+              <select value="{{ fp.status }}" onchange="{{ fp.onStatusChange }}" style="width:140px;padding:9px 12px;border-radius:8px;border:1px solid rgba(3,4,93,0.15);font-size:12.5px;color:#03045D;background:#fff;">
+                <option value="قادمة">قادمة</option><option value="جارية">جارية</option><option value="مكتملة">مكتملة</option>
+              </select>
+              <button onclick="{{ fp.onRemove }}" style="width:36px;border-radius:8px;border:none;background:#F3F7FF;color:#A12B7E;cursor:pointer;">✕</button>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="margin-bottom:20px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <label style="font-size:12.5px;font-weight:800;color:#03045D;">التحديات والحلول</label>
+            <button onclick="{{ addChallengeRow }}" style="padding:6px 12px;border-radius:7px;border:none;background:#F3F7FF;color:#03045D;font-size:11.5px;font-weight:700;cursor:pointer;">+ إضافة تحدٍ</button>
+          </div>
+          <sc-for list="{{ formChallengesView }}" as="fc" hint-placeholder-count="2">
+            <div style="display:flex;gap:8px;margin-bottom:8px;">
+              <input value="{{ fc.challenge }}" oninput="{{ fc.onChallengeChange }}" placeholder="التحدي" style="flex:1;padding:9px 12px;border-radius:8px;border:1px solid rgba(3,4,93,0.15);font-size:12.5px;color:#03045D;">
+              <input value="{{ fc.solution }}" oninput="{{ fc.onSolutionChange }}" placeholder="الحل" style="flex:1;padding:9px 12px;border-radius:8px;border:1px solid rgba(3,4,93,0.15);font-size:12.5px;color:#03045D;">
+              <button onclick="{{ fc.onRemove }}" style="width:36px;border-radius:8px;border:none;background:#F3F7FF;color:#A12B7E;cursor:pointer;">✕</button>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="display:flex;gap:10px;justify-content:flex-end;">
+          <button onclick="{{ closeProjectModal }}" style="padding:11px 20px;border-radius:9px;border:1px solid rgba(3,4,93,0.15);background:#fff;color:#03045D;font-size:13px;font-weight:700;cursor:pointer;">إلغاء</button>
+          <button onclick="{{ saveProject }}" style="padding:11px 24px;border-radius:9px;border:none;background:#03045D;color:#fff;font-size:13px;font-weight:700;cursor:pointer;">حفظ المشروع</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- Lesson add/edit modal -->
+  <sc-if value="{{ lessonModalOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;background:rgba(3,4,93,0.4);z-index:110;display:flex;align-items:center;justify-content:center;padding:20px;" onclick="{{ closeLessonModal }}">
+      <div onclick="{{ stopClick }}" style="width:640px;max-width:100%;max-height:90vh;overflow-y:auto;background:#fff;border-radius:16px;padding:28px;box-shadow:0 30px 80px rgba(3,4,93,0.4);">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+          <h2 style="font-size:18px;font-weight:800;color:#03045D;margin:0;">إضافة درس مستفاد</h2>
+          <button onclick="{{ closeLessonModal }}" style="width:32px;height:32px;border-radius:8px;border:none;background:#F3F7FF;color:#03045D;cursor:pointer;">✕</button>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+          <div style="grid-column:span 2;">
+            <label style="font-size:12px;font-weight:700;color:#03045D;display:block;margin-bottom:5px;">عنوان الدرس</label>
+            <input value="{{ lessonForm.title }}" oninput="{{ onLFTitle }}" style="width:100%;padding:10px 12px;border-radius:9px;border:1px solid rgba(3,4,93,0.15);font-size:13px;color:#03045D;">
+          </div>
+          <div>
+            <label style="font-size:12px;font-weight:700;color:#03045D;display:block;margin-bottom:5px;">ربط بالمشروع</label>
+            <select value="{{ lessonForm.projectId }}" onchange="{{ onLFProject }}" style="width:100%;padding:10px 12px;border-radius:9px;border:1px solid rgba(3,4,93,0.15);font-size:13px;color:#03045D;background:#fff;">
+              <option value="">اختر مشروعًا…</option>
+              <sc-for list="{{ allProjectOptions }}" as="op2" hint-placeholder-count="6"><option value="{{ op2.id }}">{{ op2.name }}</option></sc-for>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:12px;font-weight:700;color:#03045D;display:block;margin-bottom:5px;">ربط بالمرحلة</label>
+            <select value="{{ lessonForm.phaseName }}" onchange="{{ onLFPhase }}" style="width:100%;padding:10px 12px;border-radius:9px;border:1px solid rgba(3,4,93,0.15);font-size:13px;color:#03045D;background:#fff;">
+              <option value="">اختر مرحلة…</option>
+              <sc-for list="{{ lessonPhaseOptions }}" as="ph2" hint-placeholder-count="3"><option value="{{ ph2 }}">{{ ph2 }}</option></sc-for>
+            </select>
+          </div>
+          <div style="grid-column:span 2;">
+            <label style="font-size:12px;font-weight:700;color:#03045D;display:block;margin-bottom:5px;">التصنيف</label>
+            <input value="{{ lessonForm.category }}" oninput="{{ onLFCategory }}" placeholder="مثال: إدارة بيانات، تجربة مستخدم…" style="width:100%;padding:10px 12px;border-radius:9px;border:1px solid rgba(3,4,93,0.15);font-size:13px;color:#03045D;">
+          </div>
+          <div style="grid-column:span 2;"><label style="font-size:12px;font-weight:700;color:#03045D;display:block;margin-bottom:5px;">سبب المشكلة</label><textarea value="{{ lessonForm.cause }}" oninput="{{ onLFCause }}" style="width:100%;min-height:55px;padding:10px 12px;border-radius:9px;border:1px solid rgba(3,4,93,0.15);font-size:13px;color:#03045D;resize:vertical;"></textarea></div>
+          <div style="grid-column:span 2;"><label style="font-size:12px;font-weight:700;color:#03045D;display:block;margin-bottom:5px;">الإجراء المتخذ</label><textarea value="{{ lessonForm.action }}" oninput="{{ onLFAction }}" style="width:100%;min-height:55px;padding:10px 12px;border-radius:9px;border:1px solid rgba(3,4,93,0.15);font-size:13px;color:#03045D;resize:vertical;"></textarea></div>
+          <div style="grid-column:span 2;"><label style="font-size:12px;font-weight:700;color:#03045D;display:block;margin-bottom:5px;">النتيجة</label><textarea value="{{ lessonForm.result }}" oninput="{{ onLFResult }}" style="width:100%;min-height:55px;padding:10px 12px;border-radius:9px;border:1px solid rgba(3,4,93,0.15);font-size:13px;color:#03045D;resize:vertical;"></textarea></div>
+          <div style="grid-column:span 2;"><label style="font-size:12px;font-weight:700;color:#03045D;display:block;margin-bottom:5px;">التوصية</label><textarea value="{{ lessonForm.recommendation }}" oninput="{{ onLFRecommendation }}" style="width:100%;min-height:55px;padding:10px 12px;border-radius:9px;border:1px solid rgba(3,4,93,0.15);font-size:13px;color:#03045D;resize:vertical;"></textarea></div>
+          <label style="grid-column:span 2;display:flex;align-items:center;gap:8px;font-size:13px;color:#03045D;cursor:pointer;">
+            <input type="checkbox" checked="{{ lessonForm.reusable }}" onchange="{{ onLFReusable }}">
+            قابل لإعادة الاستخدام في مشاريع أخرى
+          </label>
+        </div>
+        <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px;">
+          <button onclick="{{ closeLessonModal }}" style="padding:11px 20px;border-radius:9px;border:1px solid rgba(3,4,93,0.15);background:#fff;color:#03045D;font-size:13px;font-weight:700;cursor:pointer;">إلغاء</button>
+          <button onclick="{{ saveLesson }}" style="padding:11px 24px;border-radius:9px;border:none;background:#03045D;color:#fff;font-size:13px;font-weight:700;cursor:pointer;">حفظ الدرس</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- New question modal -->
+  <sc-if value="{{ questionModalOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;background:rgba(3,4,93,0.4);z-index:110;display:flex;align-items:center;justify-content:center;padding:20px;" onclick="{{ closeQuestionModal }}">
+      <div onclick="{{ stopClick }}" style="width:560px;max-width:100%;background:#fff;border-radius:16px;padding:28px;box-shadow:0 30px 80px rgba(3,4,93,0.4);">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+          <h2 style="font-size:18px;font-weight:800;color:#03045D;margin:0;">سؤال جديد</h2>
+          <button onclick="{{ closeQuestionModal }}" style="width:32px;height:32px;border-radius:8px;border:none;background:#F3F7FF;color:#03045D;cursor:pointer;">✕</button>
+        </div>
+        <label style="font-size:12px;font-weight:700;color:#03045D;display:block;margin-bottom:5px;">عنوان السؤال</label>
+        <input value="{{ questionForm.title }}" oninput="{{ onQFTitle }}" style="width:100%;padding:10px 12px;border-radius:9px;border:1px solid rgba(3,4,93,0.15);font-size:13px;color:#03045D;margin-bottom:14px;">
+        <label style="font-size:12px;font-weight:700;color:#03045D;display:block;margin-bottom:5px;">تفاصيل السؤال</label>
+        <textarea value="{{ questionForm.body }}" oninput="{{ onQFBody }}" style="width:100%;min-height:100px;padding:10px 12px;border-radius:9px;border:1px solid rgba(3,4,93,0.15);font-size:13px;color:#03045D;resize:vertical;margin-bottom:14px;"></textarea>
+        <label style="font-size:12px;font-weight:700;color:#03045D;display:block;margin-bottom:5px;">الوسوم (مفصولة بفاصلة)</label>
+        <input value="{{ questionForm.tags }}" oninput="{{ onQFTags }}" placeholder="مثال: صحة، بيانات" style="width:100%;padding:10px 12px;border-radius:9px;border:1px solid rgba(3,4,93,0.15);font-size:13px;color:#03045D;margin-bottom:20px;">
+        <div style="display:flex;gap:10px;justify-content:flex-end;">
+          <button onclick="{{ closeQuestionModal }}" style="padding:11px 20px;border-radius:9px;border:1px solid rgba(3,4,93,0.15);background:#fff;color:#03045D;font-size:13px;font-weight:700;cursor:pointer;">إلغاء</button>
+          <button onclick="{{ saveQuestion }}" style="padding:11px 24px;border-radius:9px;border:none;background:#03045D;color:#fff;font-size:13px;font-weight:700;cursor:pointer;">نشر السؤال</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- Toast -->
+  <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#03045D;color:#fff;padding:13px 24px;border-radius:12px;font-size:13px;font-weight:700;box-shadow:0 14px 40px rgba(3,4,93,0.4);z-index:200;animation:toastIn 0.25s ease;">{{ toast }}</div>
+  </sc-if>
+
+</div>
+</sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    currentUser: null,
+    selectedRole: 'org_user',
+    activeSection: 'dashboard',
+    projects: [],
+    lessons: [],
+    experts: [],
+    questions: [],
+    globalSearch: '',
+    notifOpen: false,
+
+    projSearch: '', projOwner: '', projSector: '', projStatus: '',
+    compareIds: [],
+    compareOpen: false,
+    detailProjectId: null,
+    projModalOpen: false, projEditId: null,
+    projForm: this.emptyProjectForm(),
+
+    lessonSearch: '', lessonCategory: '',
+    lessonModalOpen: false,
+    lessonForm: this.emptyLessonForm(),
+    recommendOpenId: null, recommendTargets: {},
+
+    librarySearch: '', libraryCategory: '',
+
+    questionSearch: '', questionSort: 'newest',
+    questionModalOpen: false,
+    questionForm: { title: '', body: '', tags: '' },
+    activeQuestionId: null, newAnswerText: '',
+
+    chatMessages: [{ role: 'assistant', text: 'مرحبًا! أنا المساعد المعرفي للمنصة. اسألني عن مشاريع سابقة أو خبراء متخصصين، مثل: "ما مشاريع المستشفيات؟" أو "من الخبراء في الأمن السيبراني؟"' }],
+    chatInput: '',
+
+    toast: null
+  };
+
+  emptyProjectForm() {
+    return {
+      name: '', type: 'مشروع', owner: '', sector: '', description: '',
+      goals: '', budget: '', duration: '', technologies: '', partners: '',
+      status: 'قيد التخطيط', completion: 0, successIndicators: '', strategyLink: '',
+      team: '', documents: '', contracts: '',
+      phasesList: [{ name: '', status: 'قادمة' }],
+      challengesList: [{ challenge: '', solution: '' }]
+    };
+  }
+  emptyLessonForm() {
+    return { title: '', projectId: '', phaseName: '', category: '', cause: '', action: '', result: '', recommendation: '', reusable: false };
+  }
+
+  async componentDidMount() {
+    const mod = await import('./mockData.js');
+    this._mock = mod;
+    this.setState({
+      projects: JSON.parse(JSON.stringify(mod.projects)),
+      lessons: JSON.parse(JSON.stringify(mod.lessons)),
+      experts: mod.experts,
+      questions: JSON.parse(JSON.stringify(mod.questions))
+    });
+  }
+
+  showToast(msg) {
+    this.setState({ toast: msg });
+    clearTimeout(this._toastTimer);
+    this._toastTimer = setTimeout(() => this.setState({ toast: null }), 2600);
+  }
+
+  // ---------- Auth ----------
+  login() {
+    const mock = this._mock;
+    const u = mock.users[this.state.selectedRole];
+    this.setState({ currentUser: u, activeSection: 'dashboard' });
+  }
+  logout() {
+    this.setState({ currentUser: null, activeSection: 'dashboard', detailProjectId: null, projModalOpen: false, lessonModalOpen: false, questionModalOpen: false, activeQuestionId: null, compareOpen: false, compareIds: [] });
+  }
+  canEditNow() { return this.state.currentUser && this.state.currentUser.role !== 'executive'; }
+  canApproveNow() { return this.state.currentUser && (this.state.currentUser.role === 'system_admin' || this.state.currentUser.role === 'data_steward'); }
+  isAdminNow() { return this.state.currentUser && this.state.currentUser.role === 'system_admin'; }
+
+  setSection(name) { this.setState({ activeSection: name, notifOpen: false }); }
+  toggleNotif() { this.setState({ notifOpen: !this.state.notifOpen }); }
+  stopClick(e) { e.stopPropagation(); }
+  onGlobalSearch(e) { this.setState({ globalSearch: e.target.value }); }
+
+  // ---------- Projects ----------
+  onProjSearch(e) { this.setState({ projSearch: e.target.value }); }
+  onProjSectorFilter(e) { this.setState({ projSector: e.target.value }); }
+  onProjStatusFilter(e) { this.setState({ projStatus: e.target.value }); }
+
+  filteredProjects() {
+    const { projects, projSearch, projSector, projStatus } = this.state;
+    const q = (projSearch || '').trim();
+    return projects.filter(p => {
+      if (q && !(p.name.includes(q) || p.owner.includes(q))) return false;
+      if (projSector && p.sector !== projSector) return false;
+      if (projStatus && p.status !== projStatus) return false;
+      return true;
+    });
+  }
+
+  toggleCompare(id) {
+    let ids = this.state.compareIds.slice();
+    if (ids.includes(id)) ids = ids.filter(x => x !== id);
+    else {
+      ids.push(id);
+      if (ids.length > 2) ids.shift();
+    }
+    this.setState({ compareIds: ids });
+  }
+  openCompare() { this.setState({ compareOpen: true }); }
+  closeCompare() { this.setState({ compareOpen: false }); }
+
+  openDetail(id) { this.setState({ detailProjectId: id }); }
+  closeDetail() { this.setState({ detailProjectId: null }); }
+  closeDetailBackdrop() { this.setState({ detailProjectId: null }); }
+
+  openAddProject() {
+    this.setState({ projModalOpen: true, projEditId: null, projForm: this.emptyProjectForm() });
+  }
+  openEditProject(id) {
+    const p = this.state.projects.find(x => x.id === id);
+    if (!p) return;
+    this.setState({
+      projModalOpen: true, projEditId: id,
+      projForm: {
+        name: p.name, type: p.type, owner: p.owner, sector: p.sector, description: p.description,
+        goals: (p.goals || []).join('\n'), budget: p.budget, duration: p.duration,
+        technologies: (p.technologies || []).join('\n'), partners: (p.partners || []).join('\n'),
+        status: p.status, completion: p.completion, successIndicators: (p.successIndicators || []).join('\n'),
+        strategyLink: p.strategyLink, team: (p.team || []).map(t => t.name + ' - ' + t.role).join('\n'),
+        documents: (p.documents || []).join('\n'), contracts: (p.contracts || []).join('\n'),
+        phasesList: p.phases && p.phases.length ? JSON.parse(JSON.stringify(p.phases)) : [{ name: '', status: 'قادمة' }],
+        challengesList: p.challenges && p.challenges.length ? JSON.parse(JSON.stringify(p.challenges)) : [{ challenge: '', solution: '' }]
+      }
+    });
+  }
+  closeProjectModal() { this.setState({ projModalOpen: false }); }
+
+  updateForm(field, value) { this.setState({ projForm: { ...this.state.projForm, [field]: value } }); }
+  onFormName(e) { this.updateForm('name', e.target.value); }
+  onFormType(e) { this.updateForm('type', e.target.value); }
+  onFormStatus(e) { this.updateForm('status', e.target.value); }
+  onFormOwner(e) { this.updateForm('owner', e.target.value); }
+  onFormSector(e) { this.updateForm('sector', e.target.value); }
+  onFormDescription(e) { this.updateForm('description', e.target.value); }
+  onFormBudget(e) { this.updateForm('budget', e.target.value); }
+  onFormDuration(e) { this.updateForm('duration', e.target.value); }
+  onFormCompletion(e) { this.updateForm('completion', Math.max(0, Math.min(100, Number(e.target.value) || 0))); }
+  onFormStrategy(e) { this.updateForm('strategyLink', e.target.value); }
+  onFormGoals(e) { this.updateForm('goals', e.target.value); }
+  onFormTech(e) { this.updateForm('technologies', e.target.value); }
+  onFormPartners(e) { this.updateForm('partners', e.target.value); }
+  onFormSuccess(e) { this.updateForm('successIndicators', e.target.value); }
+  onFormTeam(e) { this.updateForm('team', e.target.value); }
+  onFormDocs(e) { this.updateForm('documents', e.target.value); }
+  onFormContracts(e) { this.updateForm('contracts', e.target.value); }
+
+  addPhaseRow() {
+    const list = this.state.projForm.phasesList.slice();
+    list.push({ name: '', status: 'قادمة' });
+    this.updateForm('phasesList', list);
+  }
+  removePhaseRow(i) {
+    const list = this.state.projForm.phasesList.slice();
+    list.splice(i, 1);
+    this.updateForm('phasesList', list.length ? list : [{ name: '', status: 'قادمة' }]);
+  }
+  setPhaseField(i, key, val) {
+    const list = this.state.projForm.phasesList.slice();
+    list[i] = { ...list[i], [key]: val };
+    this.updateForm('phasesList', list);
+  }
+  addChallengeRow() {
+    const list = this.state.projForm.challengesList.slice();
+    list.push({ challenge: '', solution: '' });
+    this.updateForm('challengesList', list);
+  }
+  removeChallengeRow(i) {
+    const list = this.state.projForm.challengesList.slice();
+    list.splice(i, 1);
+    this.updateForm('challengesList', list.length ? list : [{ challenge: '', solution: '' }]);
+  }
+  setChallengeField(i, key, val) {
+    const list = this.state.projForm.challengesList.slice();
+    list[i] = { ...list[i], [key]: val };
+    this.updateForm('challengesList', list);
+  }
+
+  parseLines(s) { return (s || '').split('\n').map(x => x.trim()).filter(Boolean); }
+
+  saveProject() {
+    const f = this.state.projForm;
+    if (!f.name.trim()) { this.showToast('يرجى إدخال اسم المشروع'); return; }
+    const team = this.parseLines(f.team).map(line => {
+      const parts = line.split(' - ');
+      return { name: (parts[0] || '').trim(), role: (parts[1] || '').trim() };
+    });
+    const projectData = {
+      name: f.name, type: f.type, owner: f.owner || this._mock.entities[0], sector: f.sector || this._mock.sectors[0],
+      description: f.description, goals: this.parseLines(f.goals), budget: f.budget, duration: f.duration,
+      technologies: this.parseLines(f.technologies), partners: this.parseLines(f.partners),
+      status: f.status, completion: f.completion, successIndicators: this.parseLines(f.successIndicators),
+      strategyLink: f.strategyLink, team, documents: this.parseLines(f.documents),
+      contracts: this.parseLines(f.contracts),
+      phases: f.phasesList.filter(p => p.name.trim()),
+      challenges: f.challengesList.filter(c => c.challenge.trim())
+    };
+    let projects = this.state.projects.slice();
+    if (this.state.projEditId) {
+      projects = projects.map(p => p.id === this.state.projEditId ? { ...p, ...projectData } : p);
+      this.showToast('تم تحديث بيانات المشروع');
+    } else {
+      projectData.id = 'p' + Date.now();
+      projects.push(projectData);
+      this.showToast('تم إنشاء الملف الموحد للمشروع');
+    }
+    this.setState({ projects, projModalOpen: false });
+  }
+
+  // ---------- Lessons ----------
+  onLessonSearch(e) { this.setState({ lessonSearch: e.target.value }); }
+  onLessonCategoryFilter(e) { this.setState({ lessonCategory: e.target.value }); }
+
+  filteredLessons() {
+    const { lessons, lessonSearch, lessonCategory } = this.state;
+    const q = (lessonSearch || '').trim();
+    return lessons.filter(l => {
+      if (q && !l.title.includes(q)) return false;
+      if (lessonCategory && l.category !== lessonCategory) return false;
+      return true;
+    });
+  }
+
+  openAddLesson() { this.setState({ lessonModalOpen: true, lessonForm: this.emptyLessonForm() }); }
+  closeLessonModal() { this.setState({ lessonModalOpen: false }); }
+  updateLForm(field, value) { this.setState({ lessonForm: { ...this.state.lessonForm, [field]: value } }); }
+  onLFTitle(e) { this.updateLForm('title', e.target.value); }
+  onLFProject(e) { this.updateLForm('projectId', e.target.value); this.updateLForm('phaseName', ''); }
+  onLFPhase(e) { this.updateLForm('phaseName', e.target.value); }
+  onLFCategory(e) { this.updateLForm('category', e.target.value); }
+  onLFCause(e) { this.updateLForm('cause', e.target.value); }
+  onLFAction(e) { this.updateLForm('action', e.target.value); }
+  onLFResult(e) { this.updateLForm('result', e.target.value); }
+  onLFRecommendation(e) { this.updateLForm('recommendation', e.target.value); }
+  onLFReusable(e) { this.updateLForm('reusable', e.target.checked); }
+
+  lessonPhaseOptionsList() {
+    const p = this.state.projects.find(x => x.id === this.state.lessonForm.projectId);
+    return p ? (p.phases || []).map(ph => ph.name) : [];
+  }
+
+  saveLesson() {
+    const f = this.state.lessonForm;
+    if (!f.title.trim() || !f.projectId || !f.phaseName) { this.showToast('يرجى تعبئة العنوان والمشروع والمرحلة'); return; }
+    const lessons = this.state.lessons.slice();
+    lessons.push({
+      id: 'l' + Date.now(), title: f.title, projectId: f.projectId, phaseName: f.phaseName,
+      category: f.category || 'عام', cause: f.cause, action: f.action, result: f.result,
+      recommendation: f.recommendation, reusable: f.reusable, votes: { up: 0, down: 0 }, approvalStatus: 'قيد المراجعة'
+    });
+    this.setState({ lessons, lessonModalOpen: false });
+    this.showToast('تم إضافة الدرس المستفاد');
+  }
+
+  voteLesson(id, dir) {
+    const lessons = this.state.lessons.map(l => {
+      if (l.id !== id) return l;
+      const votes = { ...l.votes };
+      if (dir === 'up') votes.up += 1; else votes.down += 1;
+      return { ...l, votes };
+    });
+    this.setState({ lessons });
+  }
+  approveLesson(id) {
+    const lessons = this.state.lessons.map(l => l.id === id ? { ...l, approvalStatus: 'معتمد' } : l);
+    this.setState({ lessons });
+    this.showToast('تم اعتماد الدرس المستفاد');
+  }
+  toggleRecommend(id) {
+    this.setState({ recommendOpenId: this.state.recommendOpenId === id ? null : id });
+  }
+  setRecommendTarget(id, value) {
+    this.setState({ recommendTargets: { ...this.state.recommendTargets, [id]: value } });
+  }
+  confirmRecommend(id) {
+    const targetId = this.state.recommendTargets[id];
+    if (!targetId) { this.showToast('يرجى اختيار مشروع مستهدف'); return; }
+    const proj = this.state.projects.find(p => p.id === targetId);
+    this.setState({ recommendOpenId: null });
+    this.showToast('تمت التوصية بالدرس لمشروع «' + (proj ? proj.name : '') + '»');
+  }
+
+  // ---------- Knowledge Library ----------
+  onLibrarySearch(e) { this.setState({ librarySearch: e.target.value }); }
+  setLibraryCategory(cat) { this.setState({ libraryCategory: this.state.libraryCategory === cat ? '' : cat }); }
+  filteredLibrary() {
+    const mock = this._mock;
+    if (!mock) return [];
+    const q = (this.state.librarySearch || '').trim();
+    return mock.knowledgeLibrary.filter(d => {
+      if (q && !d.title.includes(q)) return false;
+      if (this.state.libraryCategory && d.category !== this.state.libraryCategory) return false;
+      return true;
+    });
+  }
+  openLibraryDoc(title) { this.showToast('فتح مستند: ' + title); }
+
+  // ---------- Experts ----------
+  contactExpert(name) { this.showToast('تم إرسال طلب تواصل إلى ' + name); }
+
+  // ---------- Community ----------
+  onQuestionSearch(e) { this.setState({ questionSearch: e.target.value }); }
+  setSort(s) { this.setState({ questionSort: s }); }
+
+  filteredSortedQuestions() {
+    const { questions, questionSearch, questionSort } = this.state;
+    const q = (questionSearch || '').trim();
+    let list = questions.filter(x => !q || x.title.includes(q));
+    if (questionSort === 'top') list = list.slice().sort((a, b) => b.votes - a.votes);
+    else if (questionSort === 'unanswered') list = list.filter(x => x.answers.length === 0);
+    else list = list.slice().sort((a, b) => a.createdDaysAgo - b.createdDaysAgo);
+    return list;
+  }
+
+  openNewQuestion() { this.setState({ questionModalOpen: true, questionForm: { title: '', body: '', tags: '' } }); }
+  closeQuestionModal() { this.setState({ questionModalOpen: false }); }
+  onQFTitle(e) { this.setState({ questionForm: { ...this.state.questionForm, title: e.target.value } }); }
+  onQFBody(e) { this.setState({ questionForm: { ...this.state.questionForm, body: e.target.value } }); }
+  onQFTags(e) { this.setState({ questionForm: { ...this.state.questionForm, tags: e.target.value } }); }
+  saveQuestion() {
+    const f = this.state.questionForm;
+    if (!f.title.trim()) { this.showToast('يرجى إدخال عنوان السؤال'); return; }
+    const questions = this.state.questions.slice();
+    questions.unshift({
+      id: 'q' + Date.now(), title: f.title, body: f.body,
+      tags: f.tags.split('،').join(',').split(',').map(t => t.trim()).filter(Boolean),
+      author: this.state.currentUser.name, votes: 0, views: 1, createdDaysAgo: 0, answers: []
+    });
+    this.setState({ questions, questionModalOpen: false });
+    this.showToast('تم نشر السؤال');
+  }
+  openQuestion(id) { this.setState({ activeQuestionId: id, newAnswerText: '' }); }
+  closeQuestion() { this.setState({ activeQuestionId: null }); }
+  onNewAnswerInput(e) { this.setState({ newAnswerText: e.target.value }); }
+  submitAnswer() {
+    const text = this.state.newAnswerText.trim();
+    if (!text) return;
+    const questions = this.state.questions.map(q => {
+      if (q.id !== this.state.activeQuestionId) return q;
+      const answers = q.answers.slice();
+      answers.push({ id: 'a' + Date.now(), body: text, author: this.state.currentUser.name, accepted: false, votes: 0 });
+      return { ...q, answers };
+    });
+    this.setState({ questions, newAnswerText: '' });
+    this.showToast('تم نشر إجابتك');
+  }
+  acceptAnswer(qId, aId) {
+    const questions = this.state.questions.map(q => {
+      if (q.id !== qId) return q;
+      return { ...q, answers: q.answers.map(a => ({ ...a, accepted: a.id === aId })) };
+    });
+    this.setState({ questions });
+  }
+
+  // ---------- Assistant ----------
+  onChatInput(e) { this.setState({ chatInput: e.target.value }); }
+  onChatKeydown(e) { if (e.key === 'Enter') this.sendChat(); }
+  clickSuggested(text) { this.setState({ chatInput: text }, () => this.sendChat()); this.sendChatWith(text); }
+  sendChat() { this.sendChatWith(this.state.chatInput); }
+  sendChatWith(text) {
+    text = (text || '').trim();
+    if (!text) return;
+    const messages = this.state.chatMessages.slice();
+    messages.push({ role: 'user', text });
+    const reply = this.generateReply(text);
+    messages.push({ role: 'assistant', text: reply });
+    this.setState({ chatMessages: messages, chatInput: '' });
+  }
+  generateReply(text) {
+    if (/أمن|سيبراني|امن/.test(text)) {
+      const exps = this.state.experts.filter(e => e.specialty.includes('أمن') || (e.skills || []).some(s => s.includes('أمن')));
+      if (exps.length) return 'إليك خبراء متخصصون في الأمن السيبراني يمكن التواصل معهم:\n' + exps.map(e => '• ' + e.name + ' — ' + e.org).join('\n');
+    }
+    const sectorMap = [
+      ['مستشفيات', 'الصحة'], ['مستشفى', 'الصحة'], ['صحة', 'الصحة'],
+      ['مدارس', 'التعليم'], ['تعليم', 'التعليم'],
+      ['ميزانية', 'المالية'], ['مالية', 'المالية'],
+      ['حماية اجتماعية', 'الحماية الاجتماعية'], ['دعم اجتماعي', 'الحماية الاجتماعية'],
+      ['بلدية', 'تقنية المعلومات والاتصالات'], ['تراخيص', 'تقنية المعلومات والاتصالات']
+    ];
+    for (const [kw, sector] of sectorMap) {
+      if (text.includes(kw)) {
+        const projs = this.state.projects.filter(p => p.sector === sector).slice(0, 3);
+        if (projs.length) return 'وجدت ' + projs.length + ' من المشاريع ذات الصلة بقطاع ' + sector + ':\n' + projs.map(p => '• ' + p.name + ' — ' + p.owner + ' (' + p.status + ')').join('\n');
+      }
+    }
+    return 'لم أجد نتيجة مباشرة لسؤالك. جرّب كلمات مثل: «مستشفيات»، «أمن»، «تعليم»، أو «مالية» لعرض مشاريع أو خبراء ذوي صلة.';
+  }
+
+  // ---------- renderVals ----------
+  renderVals() {
+    const mock = this._mock;
+    const user = this.state.currentUser;
+    const showLogin = !user;
+    const showApp = !!user;
+
+    const statusColors = {
+      'قيد التخطيط': { bg: '#F3F7FF', color: '#5b6aa8' },
+      'قيد التنفيذ': { bg: 'rgba(2,166,188,0.12)', color: '#02A6BC' },
+      'مكتمل': { bg: 'rgba(3,4,93,0.1)', color: '#03045D' }
+    };
+    const approvalColors = {
+      'معتمد': { bg: 'rgba(2,166,188,0.12)', color: '#02A6BC' },
+      'قيد المراجعة': { bg: '#F3F7FF', color: '#5b6aa8' }
+    };
+    const phaseDot = { 'مكتملة': '#02A6BC', 'جارية': '#A12B7E', 'قادمة': '#B7C5E5' };
+
+    if (!user || !mock) {
+      // minimal login-only vals
+      const roleOptions = (mock ? mock.roles : []).map(r => ({
+        label: r.label, hint: '',
+        onSelect: () => this.setState({ selectedRole: r.key }),
+        cardStyle: `text-align:right;padding:14px;border-radius:12px;cursor:pointer;border:2px solid ${this.state.selectedRole === r.key ? '#02A6BC' : 'rgba(3,4,93,0.1)'};background:${this.state.selectedRole === r.key ? 'rgba(2,166,188,0.08)' : '#fff'};color:#03045D;`
+      }));
+      return {
+        showLogin, showApp,
+        logoErtiqaaSrc: LOGO_ERTIQAA, logoTahawulColorSrc: LOGO_TAHAWUL_COLOR, logoTahawulWhiteSrc: LOGO_TAHAWUL_WHITE,
+        roleOptions, login: () => this.login()
+      };
+    }
+
+    const isAdmin = this.isAdminNow();
+    const canEdit = this.canEditNow();
+    const canApprove = this.canApproveNow();
+
+    const navDefs = [
+      ['dashboard', 'لوحة القيادة'],
+      ['projects', 'مكتبة المشاريع والمبادرات'],
+      ['lessons', 'الدروس المستفادة'],
+      ['experts', 'دليل الخبراء'],
+      ['community', 'مجتمع الممارسة'],
+      ['assistant', 'المساعد المعرفي']
+    ];
+    const navMain = navDefs.map(([key, label]) => {
+      const active = this.state.activeSection === key;
+      return {
+        label,
+        dotColor: active ? '#02A6BC' : 'rgba(183,197,229,0.5)',
+        onClick: () => this.setSection(key),
+        style: `display:flex;align-items:center;gap:10px;width:100%;text-align:right;padding:11px 12px;border-radius:10px;border:none;cursor:pointer;margin-bottom:4px;font-size:13px;font-weight:${active ? '700' : '500'};background:${active ? 'rgba(183,197,229,0.15)' : 'transparent'};color:#fff;`
+      };
+    });
+    const adminActive = this.state.activeSection === 'admin';
+    const libraryActive = this.state.activeSection === 'library';
+
+    // Projects
+    const projectsAll = this.state.projects;
+    const decorateProject = (p) => {
+      const sc = statusColors[p.status] || statusColors['قيد التخطيط'];
+      return { ...p, statusBg: sc.bg, statusColor: sc.color };
+    };
+    const projectCards = this.filteredProjects().map(p => {
+      const sc = statusColors[p.status] || statusColors['قيد التخطيط'];
+      return {
+        ...p, statusBg: sc.bg, statusColor: sc.color,
+        compareChecked: this.state.compareIds.includes(p.id),
+        onToggleCompare: () => this.toggleCompare(p.id),
+        onOpenDetail: () => this.openDetail(p.id),
+        onOpenEdit: () => this.openEditProject(p.id)
+      };
+    });
+
+    let detailProject = null;
+    if (this.state.detailProjectId) {
+      const p = projectsAll.find(x => x.id === this.state.detailProjectId);
+      if (p) {
+        const sc = statusColors[p.status] || statusColors['قيد التخطيط'];
+        const similar = projectsAll.filter(x => x.sector === p.sector && x.id !== p.id).slice(0, 3);
+        detailProject = {
+          ...p, statusBg: sc.bg, statusColor: sc.color,
+          goalsList: p.goals || [], successList: p.successIndicators || [], techChips: p.technologies || [],
+          partnerChips: p.partners || [], docRows: p.documents || [], hasContracts: !!(p.contracts && p.contracts.length),
+          contractRows: p.contracts || [],
+          phaseRows: (p.phases || []).map(ph => ({ name: ph.name, status: ph.status, dotColor: phaseDot[ph.status] || '#B7C5E5' })),
+          challengeRows: p.challenges || [],
+          teamRows: p.team || [],
+          similarRows: similar.map(s => ({ name: s.name, owner: s.owner, onOpen: () => this.openDetail(s.id) }))
+        };
+      }
+    }
+
+    const compareProjects = this.state.compareIds.map(id => projectsAll.find(p => p.id === id)).filter(Boolean);
+    let compareFieldRows = [];
+    if (compareProjects.length === 2) {
+      const [a, b] = compareProjects;
+      const fields = [
+        ['الجهة المالكة', 'owner'], ['القطاع', 'sector'], ['الحالة', 'status'],
+        ['نسبة الإنجاز', 'completion'], ['الميزانية', 'budget'], ['مدة التنفيذ', 'duration']
+      ];
+      compareFieldRows = fields.map(([label, key]) => ({
+        label, a: key === 'completion' ? a[key] + '٪' : a[key], b: key === 'completion' ? b[key] + '٪' : b[key]
+      }));
+    }
+
+    // Lessons
+    const lessonCards = this.filteredLessons().map(l => {
+      const proj = projectsAll.find(p => p.id === l.projectId);
+      const total = l.votes.up + l.votes.down;
+      const usefulPercent = total > 0 ? Math.round((l.votes.up / total) * 100) : 0;
+      const ac = approvalColors[l.approvalStatus] || approvalColors['قيد المراجعة'];
+      return {
+        ...l, projectName: proj ? proj.name : '—',
+        approvalBg: ac.bg, approvalColor: ac.color,
+        hasVotes: total > 0, noVotes: total === 0, usefulPercent,
+        showApprove: canApprove && l.approvalStatus !== 'معتمد',
+        onVoteUp: () => this.voteLesson(l.id, 'up'),
+        onVoteDown: () => this.voteLesson(l.id, 'down'),
+        onApprove: () => this.approveLesson(l.id),
+        onToggleRecommend: () => this.toggleRecommend(l.id),
+        recommendOpen: this.state.recommendOpenId === l.id,
+        recommendTarget: this.state.recommendTargets[l.id] || '',
+        onSetRecommendTarget: (e) => this.setRecommendTarget(l.id, e.target.value),
+        onConfirmRecommend: () => this.confirmRecommend(l.id)
+      };
+    });
+    const lessonCategoryOptions = [...new Set(this.state.lessons.map(l => l.category))];
+    const allProjectOptions = projectsAll.map(p => ({ id: p.id, name: p.name }));
+
+    // Experts
+    const expertCards = this.state.experts.map(e => ({
+      ...e, initial: e.name.replace('د. ', '').replace('م. ', '').replace('أ. ', '')[0] || 'خ',
+      skillChips: e.skills, onContact: () => this.contactExpert(e.name)
+    }));
+
+    // Community
+    const sortOptions = [
+      { key: 'newest', label: 'الأحدث' },
+      { key: 'top', label: 'الأعلى تصويتًا' },
+      { key: 'unanswered', label: 'بدون إجابة' }
+    ].map(o => ({
+      label: o.label, onClick: () => this.setSort(o.key),
+      style: `padding:9px 14px;border-radius:9px;border:1px solid ${this.state.questionSort === o.key ? '#02A6BC' : 'rgba(3,4,93,0.15)'};background:${this.state.questionSort === o.key ? 'rgba(2,166,188,0.1)' : '#fff'};color:#03045D;font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap;`
+    }));
+    const questionRows = this.filteredSortedQuestions().map(q => ({
+      ...q, answerCount: q.answers.length,
+      answerColor: q.answers.some(a => a.accepted) ? '#02A6BC' : '#03045D',
+      tagChips: q.tags, timeLabel: q.createdDaysAgo === 0 ? 'اليوم' : ('قبل ' + q.createdDaysAgo + ' يوم'),
+      onOpen: () => this.openQuestion(q.id)
+    }));
+
+    let activeQuestion = null;
+    if (this.state.activeQuestionId) {
+      const q = this.state.questions.find(x => x.id === this.state.activeQuestionId);
+      if (q) {
+        activeQuestion = {
+          ...q, answerCount: q.answers.length, tagChips: q.tags,
+          timeLabel: q.createdDaysAgo === 0 ? 'اليوم' : ('قبل ' + q.createdDaysAgo + ' يوم'),
+          answerRows: q.answers.map(a => ({
+            ...a, bg: a.accepted ? 'rgba(2,166,188,0.08)' : '#F3F7FF',
+            border: a.accepted ? 'rgba(2,166,188,0.35)' : 'rgba(3,4,93,0.06)',
+            showAccept: canEdit && !a.accepted,
+            onAccept: () => this.acceptAnswer(q.id, a.id)
+          }))
+        };
+      }
+    }
+
+    // Dashboard
+    const kpiProjectsCount = projectsAll.length;
+    const kpiLessonsCount = this.state.lessons.length;
+    const reusableCount = this.state.lessons.filter(l => l.reusable).length;
+    const reuseRate = this.state.lessons.length ? Math.round((reusableCount / this.state.lessons.length) * 100) : 0;
+    const entitiesCount = new Set(projectsAll.map(p => p.owner)).size;
+    const kpiCards = [
+      { label: 'عدد المشاريع', value: kpiProjectsCount, color: '#03045D' },
+      { label: 'عدد الدروس المستفادة', value: kpiLessonsCount, color: '#A12B7E' },
+      { label: 'نسبة إعادة استخدام الحلول', value: reuseRate + '٪', color: '#02A6BC' },
+      { label: 'عدد الجهات المشاركة', value: entitiesCount, color: '#B7C5E5' }
+    ];
+
+    const monthly = [
+      { label: 'فبراير', value: 4 }, { label: 'مارس', value: 7 }, { label: 'أبريل', value: 9 },
+      { label: 'مايو', value: 13 }, { label: 'يونيو', value: 15 }, { label: 'يوليو', value: kpiProjectsCount || 18 }
+    ];
+    const maxV = Math.max(...monthly.map(m => m.value), 1);
+    const chartW = 440, chartX0 = 30, chartX1 = 470, chartY0 = 170, chartY1 = 20;
+    const stepX = (chartX1 - chartX0) / (monthly.length - 1);
+    const lineDots = monthly.map((m, i) => ({
+      x: Math.round(chartX0 + i * stepX),
+      y: Math.round(chartY0 - (m.value / maxV) * (chartY0 - chartY1)),
+      label: m.label
+    }));
+    const linePoints = lineDots.map(d => d.x + ',' + d.y).join(' ');
+
+    const sectorCounts = {};
+    projectsAll.forEach(p => { sectorCounts[p.sector] = (sectorCounts[p.sector] || 0) + 1; });
+    const palette = ['#02A6BC', '#A12B7E', '#03045D', '#B7C5E5', '#5b8fd6', '#6dd0c8'];
+    const r = 64, circumference = 2 * Math.PI * r;
+    let cumulative = 0;
+    const donutSegments = Object.entries(sectorCounts).map(([sector, count], i) => {
+      const frac = count / kpiProjectsCount;
+      const dash = frac * circumference;
+      const seg = { sector, count, color: palette[i % palette.length], dasharray: dash + ' ' + (circumference - dash), dashoffset: -cumulative };
+      cumulative += dash;
+      return seg;
+    });
+
+    const sectorParticipation = Object.entries(sectorCounts).map(([sector, count]) => {
+      const owners = new Set(projectsAll.filter(p => p.sector === sector).map(p => p.owner)).size;
+      const percent = Math.round((owners / mock.entities.length) * 100);
+      return { sector, percent, percentLabel: percent + '٪ من الجهات' };
+    });
+
+    const recentActivity = mock.auditLog.slice(0, 5);
+
+    // Form views
+    const formPhasesView = this.state.projForm.phasesList.map((p, i) => ({
+      ...p, onNameChange: (e) => this.setPhaseField(i, 'name', e.target.value),
+      onStatusChange: (e) => this.setPhaseField(i, 'status', e.target.value),
+      onRemove: () => this.removePhaseRow(i)
+    }));
+    const formChallengesView = this.state.projForm.challengesList.map((c, i) => ({
+      ...c, onChallengeChange: (e) => this.setChallengeField(i, 'challenge', e.target.value),
+      onSolutionChange: (e) => this.setChallengeField(i, 'solution', e.target.value),
+      onRemove: () => this.removeChallengeRow(i)
+    }));
+
+    // Chat bubbles
+    const chatBubbles = this.state.chatMessages.map(m => ({
+      text: m.text,
+      align: m.role === 'user' ? 'flex-end' : 'flex-start',
+      bg: m.role === 'user' ? '#03045D' : '#F3F7FF',
+      color: m.role === 'user' ? '#fff' : '#03045D'
+    }));
+    const suggestedChips = [
+      'ما مشاريع المستشفيات؟', 'من الخبراء في الأمن السيبراني؟', 'ما مشاريع التعليم الرقمي الحالية؟'
+    ].map(label => ({ label, onClick: () => this.sendChatWith(label) }));
+
+    // Admin
+    const roleRows = mock.roles.map(r => ({ label: r.label, permChips: r.permissions }));
+    const classColors = { public: { bg: 'rgba(2,166,188,0.12)', color: '#02A6BC' }, internal: { bg: '#F3F7FF', color: '#5b6aa8' }, restricted: { bg: 'rgba(161,43,126,0.12)', color: '#A12B7E' } };
+    const classificationRows = mock.dataClassifications.map(c => ({ ...c, ...classColors[c.key] }));
+    const auditRows = mock.auditLog;
+
+    const libraryCategoryChips = mock.libraryCategories.map(cat => ({
+      label: cat, onClick: () => this.setLibraryCategory(cat),
+      style: `padding:8px 14px;border-radius:20px;border:1px solid ${this.state.libraryCategory === cat ? '#02A6BC' : 'rgba(3,4,93,0.15)'};background:${this.state.libraryCategory === cat ? 'rgba(2,166,188,0.1)' : '#fff'};color:#03045D;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;`
+    }));
+    const libraryDocs = this.filteredLibrary().map(d => ({ ...d, onOpen: () => this.openLibraryDoc(d.title) }));
+
+    return {
+      showLogin, showApp,
+      logoErtiqaaSrc: LOGO_ERTIQAA, logoTahawulColorSrc: LOGO_TAHAWUL_COLOR, logoTahawulWhiteSrc: LOGO_TAHAWUL_WHITE,
+      isAdmin, canEdit,
+      navMain,
+      goAdmin: () => this.setSection('admin'),
+      adminNavStyle: `display:flex;align-items:center;gap:10px;width:100%;text-align:right;padding:11px 12px;border-radius:10px;border:none;cursor:pointer;font-size:13px;font-weight:${adminActive ? '700' : '500'};background:${adminActive ? 'rgba(183,197,229,0.15)' : 'transparent'};color:#fff;`,
+      goLibrary: () => this.setSection('library'),
+      libraryNavStyle: `display:flex;align-items:center;gap:10px;width:100%;text-align:right;padding:11px 12px;border-radius:10px;border:none;cursor:pointer;margin-bottom:4px;font-size:13px;font-weight:${libraryActive ? '700' : '500'};background:${libraryActive ? 'rgba(183,197,229,0.15)' : 'transparent'};color:#fff;`,
+      isLibrary: this.state.activeSection === 'library',
+      librarySearch: this.state.librarySearch, onLibrarySearch: (e) => this.onLibrarySearch(e),
+      libraryCategoryChips, libraryDocs,
+      globalSearch: this.state.globalSearch, onGlobalSearch: (e) => this.onGlobalSearch(e),
+      toggleNotif: () => this.toggleNotif(), notifOpen: this.state.notifOpen,
+      notifItems: ['تمت إضافة درس مستفاد جديد بانتظار الاعتماد', 'تحديث على مشروع منظومة الحماية الاجتماعية', 'سؤال جديد في مجتمع الممارسة'],
+      userInitial: user.name[0], userName: user.name,
+      userRoleLabel: (mock.roles.find(r => r.key === user.role) || {}).label || '',
+      logout: () => this.logout(),
+
+      isDashboard: this.state.activeSection === 'dashboard',
+      isProjects: this.state.activeSection === 'projects',
+      isLessons: this.state.activeSection === 'lessons',
+      isExperts: this.state.activeSection === 'experts',
+      isCommunity: this.state.activeSection === 'community',
+      isAssistant: this.state.activeSection === 'assistant',
+      isAdminSection: this.state.activeSection === 'admin' && isAdmin,
+
+      kpiCards, kpiProjectsCount,
+      linePoints, lineDots,
+      donutSegments, sectorParticipation, recentActivity,
+
+      projSearch: this.state.projSearch, onProjSearch: (e) => this.onProjSearch(e),
+      projSector: this.state.projSector, onProjSectorFilter: (e) => this.onProjSectorFilter(e),
+      projStatus: this.state.projStatus, onProjStatusFilter: (e) => this.onProjStatusFilter(e),
+      sectorOptions: mock.sectors, entityOptions: mock.entities,
+      openAddProject: () => this.openAddProject(),
+      projectCards,
+      showCompareBar: this.state.compareIds.length === 2,
+      openCompare: () => this.openCompare(),
+
+      detailProject, closeDetail: () => this.closeDetail(), closeDetailBackdrop: () => this.closeDetailBackdrop(), stopClick: (e) => this.stopClick(e),
+
+      compareOpen: this.state.compareOpen, closeCompare: () => this.closeCompare(),
+      compareProjects, compareFieldRows,
+
+      projModalOpen: this.state.projModalOpen, closeProjectModal: () => this.closeProjectModal(),
+      projModalTitle: this.state.projEditId ? 'تعديل بيانات المشروع' : 'إضافة مشروع جديد',
+      projForm: this.state.projForm,
+      onFormName: (e) => this.onFormName(e), onFormType: (e) => this.onFormType(e), onFormStatus: (e) => this.onFormStatus(e),
+      onFormOwner: (e) => this.onFormOwner(e), onFormSector: (e) => this.onFormSector(e), onFormDescription: (e) => this.onFormDescription(e),
+      onFormBudget: (e) => this.onFormBudget(e), onFormDuration: (e) => this.onFormDuration(e), onFormCompletion: (e) => this.onFormCompletion(e),
+      onFormStrategy: (e) => this.onFormStrategy(e), onFormGoals: (e) => this.onFormGoals(e), onFormTech: (e) => this.onFormTech(e),
+      onFormPartners: (e) => this.onFormPartners(e), onFormSuccess: (e) => this.onFormSuccess(e), onFormTeam: (e) => this.onFormTeam(e),
+      onFormDocs: (e) => this.onFormDocs(e), onFormContracts: (e) => this.onFormContracts(e),
+      addPhaseRow: () => this.addPhaseRow(), addChallengeRow: () => this.addChallengeRow(),
+      formPhasesView, formChallengesView,
+      saveProject: () => this.saveProject(),
+
+      lessonSearch: this.state.lessonSearch, onLessonSearch: (e) => this.onLessonSearch(e),
+      lessonCategory: this.state.lessonCategory, onLessonCategoryFilter: (e) => this.onLessonCategoryFilter(e),
+      lessonCategoryOptions, lessonCards, allProjectOptions,
+      openAddLesson: () => this.openAddLesson(),
+      lessonModalOpen: this.state.lessonModalOpen, closeLessonModal: () => this.closeLessonModal(),
+      lessonForm: this.state.lessonForm,
+      onLFTitle: (e) => this.onLFTitle(e), onLFProject: (e) => this.onLFProject(e), onLFPhase: (e) => this.onLFPhase(e),
+      onLFCategory: (e) => this.onLFCategory(e), onLFCause: (e) => this.onLFCause(e), onLFAction: (e) => this.onLFAction(e),
+      onLFResult: (e) => this.onLFResult(e), onLFRecommendation: (e) => this.onLFRecommendation(e), onLFReusable: (e) => this.onLFReusable(e),
+      lessonPhaseOptions: this.lessonPhaseOptionsList(),
+      saveLesson: () => this.saveLesson(),
+
+      expertCards,
+
+      activeQuestionNull: !this.state.activeQuestionId,
+      activeQuestion,
+      openNewQuestion: () => this.openNewQuestion(),
+      questionSearch: this.state.questionSearch, onQuestionSearch: (e) => this.onQuestionSearch(e),
+      sortOptions, questionRows,
+      closeQuestion: () => this.closeQuestion(),
+      newAnswerText: this.state.newAnswerText, onNewAnswerInput: (e) => this.onNewAnswerInput(e), submitAnswer: () => this.submitAnswer(),
+      questionModalOpen: this.state.questionModalOpen, closeQuestionModal: () => this.closeQuestionModal(),
+      questionForm: this.state.questionForm,
+      onQFTitle: (e) => this.onQFTitle(e), onQFBody: (e) => this.onQFBody(e), onQFTags: (e) => this.onQFTags(e),
+      saveQuestion: () => this.saveQuestion(),
+
+      chatBubbles, suggestedChips,
+      chatInput: this.state.chatInput, onChatInput: (e) => this.onChatInput(e), onChatKeydown: (e) => this.onChatKeydown(e),
+      sendChat: () => this.sendChat(),
+
+      roleRows, classificationRows, auditRows,
+
+      toast: this.state.toast
+    };
+  }
+}
+
+const LOGO_ERTIQAA = "data:image/png;base64,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";
+const LOGO_TAHAWUL_COLOR = "data:image/png;base64,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";
+const LOGO_TAHAWUL_WHITE = "data:image/png;base64,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";
+
+</script>
+</body>
+</html>
